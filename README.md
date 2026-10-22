@@ -105,6 +105,12 @@ Until the app is live in the App Store with those products approved, there is
 no way to take real money. The local `.storekit` configuration is only a
 simulator.
 
+## Website
+
+A static landing page lives in `web/`. It has no build step, no JavaScript and
+no external requests. See `web/README.md` for deployment, SEO and App Store link
+instructions.
+
 ## Architecture
 
 - `AudioDeviceService` — UI-free Core Audio HAL wrapper. Lists output devices,

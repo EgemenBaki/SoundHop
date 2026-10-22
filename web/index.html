@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SoundHop — Switch Mac sound output with a shortcut</title>
+  <meta name="description" content="A tiny macOS menu bar app that switches sound output with a global shortcut. One shortcut per device. Free, private, and made for macOS.">
+  <meta name="author" content="Egemen Baki">
+  <meta name="application-name" content="SoundHop">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0d13" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://egemenbaki.com.tr/soundhop/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SoundHop">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="SoundHop — Switch Mac sound output with a shortcut">
+  <meta property="og:description" content="A tiny macOS menu bar app. One global shortcut per sound output device. Free, fast and private.">
+  <meta property="og:url" content="https://egemenbaki.com.tr/soundhop/">
+  <meta property="og:image" content="https://egemenbaki.com.tr/soundhop/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SoundHop app icon and the tagline: switch your Mac's sound output with a shortcut.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SoundHop — Switch Mac sound output with a shortcut">
+  <meta name="twitter:description" content="A tiny macOS menu bar app. One global shortcut per sound output device. Free, fast and private.">
+  <meta name="twitter:image" content="https://egemenbaki.com.tr/soundhop/og-image.jpg">
+  <meta name="twitter:image:alt" content="SoundHop app icon and tagline.">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f8fb;
+      --bg-glow-a: rgba(70, 94, 255, .13);
+      --bg-glow-b: rgba(137, 77, 255, .11);
+      --text: #101218;
+      --muted: #555d6e;
+      --faint: #5f6879;
+      --surface: rgba(255, 255, 255, .74);
+      --surface-solid: #ffffff;
+      --border: rgba(20, 25, 40, .10);
+      --border-strong: rgba(20, 25, 40, .16);
+      --accent: #3a51d8;
+      --accent-soft: #e9edff;
+      --store-bg: #101218;
+      --store-text: #ffffff;
+      --shadow: 0 20px 55px rgba(28, 35, 70, .10);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0d13;
+        --bg-glow-a: rgba(85, 107, 255, .19);
+        --bg-glow-b: rgba(158, 86, 255, .14);
+        --text: #f3f5fb;
+        --muted: #a6acba;
+        --faint: #858d9e;
+        --surface: rgba(20, 23, 33, .76);
+        --surface-solid: #141721;
+        --border: rgba(255, 255, 255, .10);
+        --border-strong: rgba(255, 255, 255, .17);
+        --accent: #a4b4ff;
+        --accent-soft: rgba(112, 132, 255, .16);
+        --store-bg: #f5f6fa;
+        --store-text: #0b0d13;
+        --shadow: 0 24px 65px rgba(0, 0, 0, .38);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(70% 48% at 50% -8%, var(--bg-glow-a), transparent 72%),
+        radial-gradient(42% 36% at 101% 22%, var(--bg-glow-b), transparent 72%),
+        var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    ::selection { background: var(--accent); color: var(--surface-solid); }
+
+    a { color: inherit; }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--text);
+      color: var(--bg);
+      transform: translateY(-150%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .page {
+      width: min(100% - 40px, 940px);
+      margin-inline: auto;
+    }
+
+    .hero {
+      padding: clamp(58px, 10vw, 104px) 0 0;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 24px;
+      padding: 6px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .hero-label svg {
+      width: 13px;
+      height: 13px;
+      color: var(--accent);
+    }
+
+    .app-icon {
+      display: block;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 24px;
+      border-radius: 22px;
+      box-shadow: 0 14px 34px rgba(48, 71, 215, .22);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      font-size: clamp(2.55rem, 7.1vw, 4.7rem);
+      font-weight: 750;
+      line-height: .98;
+      letter-spacing: -.058em;
+      text-wrap: balance;
+    }
+
+    .lede {
+      max-width: 610px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.12rem);
+      line-height: 1.68;
+      text-wrap: pretty;
+    }
+
+    .lede strong {
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 28px auto 0;
+    }
+
+    .store-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 8px 18px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: var(--store-bg);
+      color: var(--store-text);
+      box-shadow: 0 6px 20px rgba(16, 18, 24, .16);
+      font-size: 14px;
+      font-weight: 650;
+      line-height: 1.15;
+      text-decoration: none;
+    }
+
+    .store-button svg {
+      width: 20px;
+      height: 20px;
+      flex: none;
+    }
+
+    .store-button small {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 9px;
+      font-weight: 550;
+      letter-spacing: .02em;
+      opacity: .7;
+    }
+
+    .store-button.is-coming-soon { cursor: default; }
+
+    .quiet-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 4px 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .quiet-link svg { width: 15px; height: 15px; }
+    .quiet-link:hover { color: var(--text); }
+    .quiet-link { transition: color .15s ease; }
+
+    a.store-button:hover {
+      box-shadow: 0 9px 24px rgba(16, 18, 24, .22);
+    }
+
+    a.store-button { transition: box-shadow .15s ease; }
+
+    .micro {
+      margin: 14px 0 0;
+      color: var(--faint);
+      font-size: 12.5px;
+    }
+
+    .shortcut-demo {
+      max-width: 590px;
+      margin: clamp(38px, 6vw, 56px) auto 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: left;
+    }
+
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 56px;
+      padding: 9px 12px;
+      border-radius: 16px;
+    }
+
+    .shortcut-row + .shortcut-row { border-top: 1px solid var(--border); }
+    .shortcut-row.is-current { background: var(--accent-soft); }
+
+    .keys {
+      display: inline-flex;
+      flex: none;
+      gap: 4px;
+    }
+
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 25px;
+      height: 25px;
+      padding: 0 6px;
+      border: 1px solid var(--border-strong);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--surface-solid);
+      color: var(--text);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
+    }
+
+    .device {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .device svg {
+      width: 20px;
+      height: 20px;
+      flex: none;
+      color: var(--muted);
+    }
+
+    .device-name {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 620;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .check {
+      display: grid;
+      place-items: center;
+      width: 21px;
+      height: 21px;
+      flex: none;
+      border-radius: 50%;
+      background: #1f9d55;
+      color: #ffffff;
+    }
+
+    .check svg { width: 12px; height: 12px; }
+
+    section[id] { scroll-margin-top: 24px; }
+
+    .features {
+      padding: clamp(62px, 9vw, 100px) 0 0;
+    }
+
+    .section-head {
+      max-width: 620px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      font-size: clamp(1.8rem, 3.6vw, 2.55rem);
+      line-height: 1.06;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .section-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature {
+      padding: 23px 22px 24px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 17px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .feature-icon svg { width: 20px; height: 20px; }
+
+    .feature h3 {
+      margin-bottom: 6px;
+      font-size: 15px;
+      line-height: 1.3;
+      letter-spacing: -.015em;
+    }
+
+    .feature p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.62;
+      text-wrap: pretty;
+    }
+
+    .closing {
+      margin-top: clamp(62px, 9vw, 100px);
+      padding: clamp(34px, 6vw, 54px) 24px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, var(--surface), var(--accent-soft));
+      text-align: center;
+    }
+
+    .closing h2 { margin-bottom: 10px; }
+
+    .closing p {
+      max-width: 430px;
+      margin: 0 auto 22px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .closing .store-button { margin-inline: auto; }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 20px;
+      margin-top: 60px;
+      padding: 22px 0 34px;
+      border-top: 1px solid var(--border);
+      color: var(--faint);
+      font-size: 12px;
+    }
+
+    footer p { margin: 0; }
+
+    a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 720px) {
+      .feature-grid { grid-template-columns: 1fr; }
+      .feature { padding: 20px; }
+      .footer { justify-content: center; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .page { width: min(100% - 28px, 940px); }
+      .hero { padding-top: 46px; }
+      .app-icon { width: 82px; height: 82px; border-radius: 20px; }
+      .actions { flex-direction: column; }
+      .store-button { min-height: 48px; }
+      .shortcut-row { gap: 9px; padding-inline: 9px; }
+      .device-name { font-size: 13px; }
+      kbd { min-width: 23px; height: 23px; font-size: 11px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SoundHop",
+    "description": "A tiny macOS menu bar app for switching the default sound output device with a global keyboard shortcut per device.",
+    "url": "https://egemenbaki.com.tr/soundhop/",
+    "image": "https://egemenbaki.com.tr/soundhop/icon-512.png",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS 14 or later",
+    "inLanguage": "en",
+    "isAccessibleForFree": true,
+    "author": {
+      "@type": "Person",
+      "name": "Egemen Baki",
+      "url": "https://egemenbaki.com.tr/"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "One global keyboard shortcut per sound output device",
+      "Shortcuts stay bound to each device's persistent identifier",
+      "Lives in the macOS menu bar",
+      "Optional compact on-screen HUD",
+      "No account, no analytics, no tracking"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main" class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="hero-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/>
+        </svg>
+        Menu bar app for macOS
+      </p>
+
+      <img class="app-icon" src="icon-96.png" srcset="icon-96.png 1x, icon-192.png 2x" width="92" height="92" alt="SoundHop app icon" fetchpriority="high" decoding="async">
+
+      <h1 id="hero-title">Switch your Mac’s sound output with a shortcut.</h1>
+
+      <p class="lede">
+        SoundHop lives in your menu bar and switches speakers, headphones and AirPods with
+        <strong>Control-Command-1</strong> through <strong>9</strong>. Each shortcut is tied to a device’s
+        permanent identity, so it never lands on the wrong output.
+      </p>
+
+      <div class="actions">
+        <!-- APP STORE LINK: replace this span with an <a class="store-button" href="https://apps.apple.com/app/idXXXXXXXX">…</a> when the listing is live. -->
+        <span class="store-button is-coming-soon" aria-label="SoundHop is coming soon to the Mac App Store">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01M12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+          </svg>
+          <span>
+            <small>Coming soon on the</small>
+            Mac App Store
+          </span>
+        </span>
+
+        <a class="quiet-link" href="#features">
+          See how it works
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+      </div>
+
+      <p class="micro">Free · macOS&nbsp;14+ · No account needed</p>
+
+      <div class="shortcut-demo" role="group" aria-label="Example SoundHop shortcuts">
+        <div class="shortcut-row is-current">
+          <span class="keys" aria-label="Control Command 1">
+            <kbd>⌃</kbd><kbd>⌘</kbd><kbd>1</kbd>
+          </span>
+          <span class="device">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="5" width="16" height="11" rx="2"/>
+              <path d="M2 19h20"/>
+            </svg>
+            <span class="device-name">MacBook Pro Speakers</span>
+          </span>
+          <span class="check" role="img" aria-label="Current output">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m5 12 4.5 4.5L19 7"/>
+            </svg>
+          </span>
+        </div>
+
+        <div class="shortcut-row">
+          <span class="keys" aria-label="Control Command 2">
+            <kbd>⌃</kbd><kbd>⌘</kbd><kbd>2</kbd>
+          </span>
+          <span class="device">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 14v-3a8 8 0 0 1 16 0v3"/>
+              <rect x="3" y="13" width="4" height="7" rx="1.5"/>
+              <rect x="17" y="13" width="4" height="7" rx="1.5"/>
+            </svg>
+            <span class="device-name">Buds2</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features" aria-labelledby="features-title">
+      <div class="section-head">
+        <h2 id="features-title">Small app. One less annoyance.</h2>
+        <p>No Control Center, no output menu, no accidentally switching the wrong device.</p>
+      </div>
+
+      <ul class="feature-grid">
+        <li class="feature">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2 5 14h6l-1 8 8-12h-6l1-8Z"/>
+            </svg>
+          </span>
+          <h3>Instant switching</h3>
+          <p>Press a shortcut and your Mac hops to the right output. It is just one keystroke away.</p>
+        </li>
+
+        <li class="feature">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1.1"/>
+              <path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1.1"/>
+            </svg>
+          </span>
+          <h3>Bound to the device</h3>
+          <p>Shortcuts remember each device's persistent UID, not its position. Reconnect and it still works.</p>
+        </li>
+
+        <li class="feature">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3 20 6v5c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6l8-3Z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </span>
+          <h3>Quietly useful</h3>
+          <p>A tiny optional HUD, launch at login, and no accounts, analytics or tracking. Just the switch.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <h2 id="closing-title">Give your ears a shortcut.</h2>
+      <p>SoundHop is a free menu bar app for macOS&nbsp;14 and later. It is coming to the Mac App Store.</p>
+
+      <!-- APP STORE LINK: replace this span with an <a class="store-button" href="https://apps.apple.com/app/idXXXXXXXX">…</a> when the listing is live. -->
+      <span class="store-button is-coming-soon" aria-label="SoundHop is coming soon to the Mac App Store">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01M12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+        </svg>
+        <span>
+          <small>Coming soon on the</small>
+          Mac App Store
+        </span>
+      </span>
+    </section>
+  </main>
+
+  <footer class="page">
+    <p>© 2026 Egemen Baki</p>
+    <p>Made for macOS · No cookies, no analytics.</p>
+  </footer>
+</body>
+</html>
