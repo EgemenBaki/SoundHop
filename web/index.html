@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SoundHop — Switch Mac sound output with a shortcut</title>
-  <meta name="description" content="A tiny macOS menu bar app that switches sound output with a global shortcut. One shortcut per device. Free, private, and made for macOS.">
+  <meta name="description" content="A tiny macOS menu bar app that switches speakers, AirPods, Apple TV and more with a global shortcut. Free, private, and made for macOS.">
   <meta name="author" content="Egemen Baki">
   <meta name="application-name" content="SoundHop">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -17,7 +17,7 @@
   <meta property="og:site_name" content="SoundHop">
   <meta property="og:locale" content="en_US">
   <meta property="og:title" content="SoundHop — Switch Mac sound output with a shortcut">
-  <meta property="og:description" content="A tiny macOS menu bar app. One global shortcut per sound output device. Free, fast and private.">
+  <meta property="og:description" content="A tiny macOS menu bar app for switching speakers, AirPods, Apple TV and more with a global shortcut. Free and private.">
   <meta property="og:url" content="https://egemenbaki.com.tr/soundhop/">
   <meta property="og:image" content="https://egemenbaki.com.tr/soundhop/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
@@ -26,7 +26,7 @@
   <meta property="og:image:alt" content="SoundHop app icon and the tagline: switch your Mac's sound output with a shortcut.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SoundHop — Switch Mac sound output with a shortcut">
-  <meta name="twitter:description" content="A tiny macOS menu bar app. One global shortcut per sound output device. Free, fast and private.">
+  <meta name="twitter:description" content="A tiny macOS menu bar app for switching speakers, AirPods, Apple TV and more with a global shortcut. Free and private.">
   <meta name="twitter:image" content="https://egemenbaki.com.tr/soundhop/og-image.jpg">
   <meta name="twitter:image:alt" content="SoundHop app icon and tagline.">
 
@@ -409,7 +409,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "SoundHop",
-    "description": "A tiny macOS menu bar app for switching the default sound output device with a global keyboard shortcut per device.",
+    "description": "A tiny macOS menu bar app for switching speakers, AirPods, Apple TV and other sound output devices with a global keyboard shortcut.",
     "url": "https://egemenbaki.com.tr/soundhop/",
     "image": "https://egemenbaki.com.tr/soundhop/icon-512.png",
     "applicationCategory": "UtilitiesApplication",
@@ -428,6 +428,7 @@
     },
     "featureList": [
       "One global keyboard shortcut per sound output device",
+      "Works with built-in, Bluetooth, USB and AirPlay output devices",
       "Shortcuts stay bound to each device's persistent identifier",
       "Lives in the macOS menu bar",
       "Optional compact on-screen HUD",
@@ -453,8 +454,8 @@
       <h1 id="hero-title">Switch your Mac’s sound output with a shortcut.</h1>
 
       <p class="lede">
-        SoundHop lives in your menu bar and switches speakers, headphones and AirPods with
-        a global shortcut. Set one per device, or keep the defaults. Each shortcut is tied to a
+        SoundHop lives in your menu bar and switches speakers, headphones, AirPods and Apple TV
+        with a global shortcut. Set one per device, or keep the defaults. Each shortcut is tied to a
         device’s permanent identity, so it never lands on the wrong output.
       </p>
 
@@ -490,6 +491,32 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="m5 12 4.5 4.5L19 7"/>
             </svg>
+          </span>
+        </div>
+
+        <div class="shortcut-row">
+          <span class="keys" aria-label="Option Command A">
+            <kbd>⌥</kbd><kbd>⌘</kbd><kbd>A</kbd>
+          </span>
+          <span class="device">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4.5 4.5A3.5 3.5 0 0 0 1 8c0 1.8 1.2 3.2 3 3.5v7a1.5 1.5 0 0 0 3 0V8a3.5 3.5 0 0 0-2.5-3.5Z"/>
+              <path d="M19.5 4.5A3.5 3.5 0 0 1 23 8c0 1.8-1.2 3.2-3 3.5v7a1.5 1.5 0 0 1-3 0V8a3.5 3.5 0 0 1 2.5-3.5Z"/>
+            </svg>
+            <span class="device-name">AirPods</span>
+          </span>
+        </div>
+
+        <div class="shortcut-row">
+          <span class="keys" aria-label="Option Command T">
+            <kbd>⌥</kbd><kbd>⌘</kbd><kbd>T</kbd>
+          </span>
+          <span class="device">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="12" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+            </svg>
+            <span class="device-name">Apple TV</span>
           </span>
         </div>
 
