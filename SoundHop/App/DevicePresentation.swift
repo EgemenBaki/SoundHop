@@ -21,25 +21,14 @@ extension AudioDeviceTransport {
 }
 
 extension DeviceActionFeedback {
-    var hudTitle: String {
-        switch kind {
-        case .switched: "Output"
-        case .notConnected: "Device Not Connected"
-        case .failed: "Switch Failed"
-        }
-    }
-
-    var hudDetail: String {
-        switch kind {
-        case .switched: deviceName
-        case .notConnected, .failed: message
-        }
+    var hudText: String {
+        kind == .switched ? deviceName : message
     }
 
     var hudSymbolName: String {
         switch kind {
         case .switched: transport.symbolName
-        case .notConnected: "exclamationmark.triangle.fill"
+        case .notConnected: "wifi.slash"
         case .failed: "exclamationmark.triangle.fill"
         }
     }

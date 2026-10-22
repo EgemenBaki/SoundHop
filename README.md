@@ -163,7 +163,8 @@ Verified on macOS 26.6.2:
 - Control+Command+1/2 are installed for the first two devices seen, and
   `KeyboardShortcuts.isEnabled(for:)` reports both as active.
 - HAL change notifications arrive when the default output changes.
-- The HUD appears as a 320×92 non-activating panel and disappears after 1.5 s.
+- The HUD appears as a compact 252×64 non-activating panel and disappears
+  after 1.5 s.
 - The HUD is suppressed when “Show HUD” is disabled.
 - The Settings and About windows open through their activation-policy flow.
 - StoreKit tests load the three local products and complete a consumable
