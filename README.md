@@ -3,9 +3,9 @@
 A macOS menu bar app for switching the default sound output device with a
 global keyboard shortcut per device.
 
-> Status: steps 1–3 complete. Core Audio sandboxing, UID-bound shortcuts,
-> remembered devices, Settings, Launch at Login and the HUD are implemented.
-> The tip jar and About screen are next.
+> Status: steps 1–4 complete. Core Audio sandboxing, UID-bound shortcuts,
+> remembered devices, Settings, the HUD, Launch at Login and the StoreKit tip
+> jar are implemented. Final docs, App Store metadata and polish are next.
 
 ## Requirements
 
@@ -31,8 +31,9 @@ Scripts/build.sh
 Scripts/test.sh
 ```
 
-`Scripts/test.sh` runs the 12 unit tests for UID matching, remembered devices,
-default shortcut assignment and shortcut-name encoding.
+`Scripts/test.sh` runs 14 unit tests covering UID matching, remembered devices,
+default shortcut assignment, shortcut-name encoding, StoreKit product loading
+and a local consumable purchase.
 
 ## Launching
 
@@ -47,13 +48,62 @@ open .build/Build/Products/Debug/SoundHop.app
 
 - Click the menu bar icon to see connected output devices, each with its
   shortcut and a checkmark on the current output.
-- Press **Control+Command+1** through **Control+Command+9** to switch to the
-  devices that received default shortcuts.
+- Press **Control+Command+1** through **Control+Command+9** to switch.
 - Open **Settings…** to record or clear a shortcut, forget disconnected
   devices, enable Launch at Login, toggle the HUD or move alert sounds.
 - Press **Delete** while a shortcut recorder is focused to clear that shortcut.
+- Open **About & Tip Jar…** to see app information and the three tip options.
 - A non-activating HUD appears near the top of the screen for 1.5 seconds after
   a switch. It can be disabled in Settings.
+
+## Tip jar
+
+The app uses StoreKit 2 only. There are three consumable products:
+
+| Product ID | Price |
+| --- | --- |
+| `com.egemenbaki.soundhop.tip.small` | $1.99 |
+| `com.egemenbaki.soundhop.tip.medium` | $4.99 |
+| `com.egemenbaki.soundhop.tip.large` | $9.99 |
+
+Tips unlock nothing. Purchases are handled entirely by the App Store. The app
+contains no external payment links.
+
+### Testing tips locally
+
+`SoundHop.storekit` is a local StoreKit configuration containing all three
+products. It is selected in the shared **SoundHop** scheme's Run action.
+
+To test without App Store Connect:
+
+1. Open `SoundHop.xcodeproj` in Xcode.
+2. Select the **SoundHop** scheme and **My Mac**.
+3. Press **⌘R** to launch the app from Xcode.
+4. Open the menu bar icon → **About & Tip Jar…**.
+5. Buy a tip. The StoreKit test purchase dialog appears; no money is charged.
+6. The tip jar shows the thank-you state.
+
+If you launch the already-built `.app` directly from Finder or Terminal, Xcode
+does not inject the local StoreKit configuration, so the tip jar will report
+that tips are unavailable. That is expected. Use Xcode's Run action for local
+StoreKit testing.
+
+### Collecting real tips
+
+Real tips can only be collected through the Mac App Store. Before release:
+
+1. Join the paid Apple Developer Program.
+2. Create the app record with bundle ID `com.egemenbaki.soundhop` in App Store
+   Connect.
+3. Create the three **Consumable** in-app purchases with the exact product IDs
+   above and the intended prices.
+4. Complete the Paid Applications agreement plus banking and tax information.
+5. Upload a signed build, attach the in-app purchases to the version and submit
+   it for review.
+
+Until the app is live in the App Store with those products approved, there is
+no way to take real money. The local `.storekit` configuration is only a
+simulator.
 
 ## Architecture
 
@@ -80,6 +130,10 @@ open .build/Build/Products/Debug/SoundHop.app
   provides the render tree required by `openSettings`, and the activation policy
   temporarily switches to `.regular` while Settings is open. It returns to
   `.accessory` when the Settings window closes.
+- `TipJarStore` — StoreKit 2 product loading, verified purchases and purchase
+  state.
+- `AboutWindowController` / `AboutView` — About and tip jar window, with a
+  primarily AppKit window hosting a SwiftUI view.
 
 Only the KeyboardShortcuts Swift package is used
 (`https://github.com/sindresorhus/KeyboardShortcuts`, pinned to 3.1.0).
@@ -95,6 +149,8 @@ APP=.build/Build/Products/Debug/SoundHop.app/Contents/MacOS/SoundHop
 "$APP" --spike-shortcuts
 "$APP" --spike-watch
 "$APP" --spike-hud
+"$APP" --spike-settings
+"$APP" --spike-about
 "$APP" --spike-switch BuiltInSpeakerDevice
 "$APP" --spike-switch BuiltInSpeakerDevice --also-system
 ```
@@ -109,10 +165,13 @@ Verified on macOS 26.6.2:
 - HAL change notifications arrive when the default output changes.
 - The HUD appears as a 320×92 non-activating panel and disappears after 1.5 s.
 - The HUD is suppressed when “Show HUD” is disabled.
-- The Settings window opens through the hidden-window workaround.
+- The Settings and About windows open through their activation-policy flow.
+- StoreKit tests load the three local products and complete a consumable
+  purchase with a thank-you state.
 
 ## Current limitations
 
-- The tip jar and About & Tip Jar screen are not built yet.
 - The app icon is a placeholder.
 - Final App Store metadata, privacy policy and manual test checklist are pending.
+- Settings and About temporarily show a Dock icon while their windows are open
+  because of the macOS 26 SwiftUI activation workaround.

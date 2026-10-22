@@ -68,7 +68,10 @@ struct HiddenSettingsContextView: View {
             }
             .onReceive(NotificationCenter.default.publisher(for: .soundHopSettingsWindowClosed)) { _ in
                 Task { @MainActor in
-                    NSApp.setActivationPolicy(.accessory)
+                    let aboutIsOpen = AboutWindowController.shared.window?.isVisible == true
+                    if !aboutIsOpen {
+                        NSApp.setActivationPolicy(.accessory)
+                    }
                 }
             }
     }

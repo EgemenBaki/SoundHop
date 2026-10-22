@@ -30,6 +30,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             showTestHUD()
         case .settings:
             showSettingsForSpike()
+        case .about:
+            showAboutForSpike()
         }
 
         exit(EXIT_SUCCESS)
@@ -72,6 +74,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             isVirtual: false
         ))
         RunLoop.main.run(until: Date().addingTimeInterval(3))
+    }
+
+    private func showAboutForSpike() {
+        AboutWindowController.shared.show(tipJar: TipJarStore())
+        RunLoop.main.run(until: Date().addingTimeInterval(3))
+        print("key window: \(NSApp.keyWindow?.title ?? "none")")
+        for window in NSApp.windows {
+            print("window: title=\(window.title) visible=\(window.isVisible) key=\(window.isKeyWindow) class=\(type(of: window))")
+        }
     }
 
     private func showSettingsForSpike() {
@@ -136,6 +147,7 @@ private enum SpikeCommand {
     case watch
     case hud
     case settings
+    case about
 
     init?(arguments: [String]) {
         guard arguments.count >= 2 else { return nil }
@@ -151,6 +163,8 @@ private enum SpikeCommand {
             self = .hud
         case "--spike-settings":
             self = .settings
+        case "--spike-about":
+            self = .about
         case "--spike-switch" where arguments.count >= 3:
             self = .switchTo(
                 uid: arguments[2],
