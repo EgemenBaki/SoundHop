@@ -22,6 +22,11 @@
 		A30000000000000000000020 /* DeviceLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000000000000000000011 /* DeviceLibraryTests.swift */; };
 		A30000000000000000000021 /* DeviceShortcutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000000000000000000012 /* DeviceShortcutTests.swift */; };
 		A30000000000000000000022 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = A20000000000000000000005 /* KeyboardShortcuts */; };
+		A40000000000000000000020 /* DevicePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000011 /* DevicePresentation.swift */; };
+		A40000000000000000000021 /* HUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000012 /* HUDController.swift */; };
+		A40000000000000000000022 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000013 /* SettingsView.swift */; };
+		A40000000000000000000023 /* LaunchAtLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000014 /* LaunchAtLoginController.swift */; };
+		A40000000000000000000024 /* SettingsOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000015 /* SettingsOpener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +47,11 @@
 		A30000000000000000000010 /* SoundHopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundHopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000011 /* DeviceLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLibraryTests.swift; sourceTree = "<group>"; };
 		A30000000000000000000012 /* DeviceShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShortcutTests.swift; sourceTree = "<group>"; };
+		A40000000000000000000011 /* DevicePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePresentation.swift; sourceTree = "<group>"; };
+		A40000000000000000000012 /* HUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDController.swift; sourceTree = "<group>"; };
+		A40000000000000000000013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A40000000000000000000014 /* LaunchAtLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginController.swift; sourceTree = "<group>"; };
+		A40000000000000000000015 /* SettingsOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOpener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +109,11 @@
 				A10000000000000000000011 /* SoundHopApp.swift */,
 				A10000000000000000000012 /* AppDelegate.swift */,
 				A10000000000000000000013 /* DeviceStore.swift */,
+				A40000000000000000000011 /* DevicePresentation.swift */,
+				A40000000000000000000012 /* HUDController.swift */,
+				A40000000000000000000013 /* SettingsView.swift */,
+				A40000000000000000000014 /* LaunchAtLoginController.swift */,
+				A40000000000000000000015 /* SettingsOpener.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -261,6 +276,11 @@
 				A10000000000000000000028 /* DeviceShortcuts.swift in Sources */,
 				A10000000000000000000029 /* AudioDeviceMonitor.swift in Sources */,
 				A1000000000000000000002A /* Preferences.swift in Sources */,
+				A40000000000000000000020 /* DevicePresentation.swift in Sources */,
+				A40000000000000000000021 /* HUDController.swift in Sources */,
+				A40000000000000000000022 /* SettingsView.swift in Sources */,
+				A40000000000000000000023 /* LaunchAtLoginController.swift in Sources */,
+				A40000000000000000000024 /* SettingsOpener.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

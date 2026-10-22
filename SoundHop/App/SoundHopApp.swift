@@ -7,38 +7,69 @@ struct SoundHopApp: App {
     @StateObject private var store = DeviceStore()
 
     var body: some Scene {
+        // Must precede the Settings scene: SwiftUI needs a rendered scene for
+        // openSettings to work in a menu bar-only app.
+        Window("Hidden", id: "HiddenWindow") {
+            HiddenSettingsContextView()
+        }
+        .windowResizability(.contentSize)
+        .defaultSize(width: 1, height: 1)
+
         MenuBarExtra("SoundHop", systemImage: "hifispeaker.2") {
-            if let feedback = store.lastFeedback {
-                Text(feedback.message)
-                Divider()
-            } else if let error = store.lastError {
-                Text(error)
-                Divider()
-            }
-
-            if store.orderedConnectedDevices.isEmpty {
-                Text("No output devices")
-            } else {
-                ForEach(store.orderedConnectedDevices) { device in
-                    Toggle(
-                        label(for: device),
-                        isOn: Binding(
-                            get: { store.defaultOutputUID == device.uid },
-                            set: { isOn in
-                                if isOn {
-                                    store.switchOutput(to: device)
-                                }
-                            }
-                        )
-                    )
-                }
-            }
-
-            Divider()
-            Button("Refresh") { store.refresh() }
-            Button("Quit SoundHop") { NSApplication.shared.terminate(nil) }
+            MenuBarContent(store: store)
         }
         .menuBarExtraStyle(.menu)
+
+        Settings {
+            SettingsView(store: store)
+                .onDisappear {
+                    NotificationCenter.default.post(
+                        name: .soundHopSettingsWindowClosed,
+                        object: nil
+                    )
+                }
+        }
+    }
+}
+
+private struct MenuBarContent: View {
+    @ObservedObject var store: DeviceStore
+
+    var body: some View {
+        if let error = store.lastError {
+            Text(error)
+            Divider()
+        }
+
+        if store.orderedConnectedDevices.isEmpty {
+            Text("No output devices")
+        } else {
+            ForEach(store.orderedConnectedDevices) { device in
+                Toggle(
+                    label(for: device),
+                    isOn: Binding(
+                        get: { store.defaultOutputUID == device.uid },
+                        set: { isOn in
+                            if isOn {
+                                store.switchOutput(to: device)
+                            }
+                        }
+                    )
+                )
+            }
+        }
+
+        Divider()
+
+        Button("Settings…") {
+            SettingsOpener.open()
+        }
+
+        Divider()
+
+        Button("Quit SoundHop") {
+            NSApplication.shared.terminate(nil)
+        }
     }
 
     private func label(for device: AudioDevice) -> String {

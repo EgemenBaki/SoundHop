@@ -26,6 +26,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             listShortcuts()
         case .watch:
             watchDeviceChanges()
+        case .hud:
+            showTestHUD()
+        case .settings:
+            showSettingsForSpike()
         }
 
         exit(EXIT_SUCCESS)
@@ -56,6 +60,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("ERROR: \(error.localizedDescription)")
             exit(EXIT_FAILURE)
+        }
+    }
+
+    private func showTestHUD() {
+        HUDController.shared.present(DeviceActionFeedback(
+            kind: .switched,
+            deviceUID: "test",
+            deviceName: "Test Headphones",
+            transport: .bluetooth,
+            isVirtual: false
+        ))
+        RunLoop.main.run(until: Date().addingTimeInterval(3))
+    }
+
+    private func showSettingsForSpike() {
+        SettingsOpener.open()
+        RunLoop.main.run(until: Date().addingTimeInterval(3))
+        for window in NSApp.windows {
+            print("window: title=\(window.title) visible=\(window.isVisible) class=\(type(of: window))")
         }
     }
 
@@ -111,6 +134,8 @@ private enum SpikeCommand {
     case switchTo(uid: String, moveSystemOutput: Bool)
     case shortcuts
     case watch
+    case hud
+    case settings
 
     init?(arguments: [String]) {
         guard arguments.count >= 2 else { return nil }
@@ -122,6 +147,10 @@ private enum SpikeCommand {
             self = .shortcuts
         case "--spike-watch":
             self = .watch
+        case "--spike-hud":
+            self = .hud
+        case "--spike-settings":
+            self = .settings
         case "--spike-switch" where arguments.count >= 3:
             self = .switchTo(
                 uid: arguments[2],

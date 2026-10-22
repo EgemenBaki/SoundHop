@@ -12,6 +12,8 @@ struct DeviceActionFeedback: Identifiable, Equatable, Sendable {
     let kind: Kind
     let deviceUID: String
     let deviceName: String
+    let transport: AudioDeviceTransport
+    let isVirtual: Bool
 
     var message: String {
         switch kind {
@@ -92,11 +94,13 @@ final class DeviceStore: ObservableObject {
             return
         }
         guard isConnected(device.uid) else {
-            lastFeedback = DeviceActionFeedback(
+            present(DeviceActionFeedback(
                 kind: .notConnected,
                 deviceUID: remembered.uid,
-                deviceName: remembered.name
-            )
+                deviceName: remembered.name,
+                transport: remembered.transport,
+                isVirtual: remembered.isVirtual
+            ))
             return
         }
 
@@ -109,25 +113,31 @@ final class DeviceStore: ObservableObject {
             defaultOutputUID = result.actualUID
 
             if result.didStick {
-                lastFeedback = DeviceActionFeedback(
+                present(DeviceActionFeedback(
                     kind: .switched,
                     deviceUID: remembered.uid,
-                    deviceName: remembered.name
-                )
+                    deviceName: remembered.name,
+                    transport: remembered.transport,
+                    isVirtual: remembered.isVirtual
+                ))
             } else {
-                lastFeedback = DeviceActionFeedback(
+                present(DeviceActionFeedback(
                     kind: .failed,
                     deviceUID: remembered.uid,
-                    deviceName: remembered.name
-                )
+                    deviceName: remembered.name,
+                    transport: remembered.transport,
+                    isVirtual: remembered.isVirtual
+                ))
             }
         } catch {
             refresh()
-            lastFeedback = DeviceActionFeedback(
+            present(DeviceActionFeedback(
                 kind: .failed,
                 deviceUID: remembered.uid,
-                deviceName: remembered.name
-            )
+                deviceName: remembered.name,
+                transport: remembered.transport,
+                isVirtual: remembered.isVirtual
+            ))
             lastError = error.localizedDescription
         }
     }
@@ -180,13 +190,20 @@ final class DeviceStore: ObservableObject {
     private func activateDevice(uid: String) {
         guard let remembered = library.rememberedDevice(forUID: uid) else { return }
         guard let device = connectedDevices.first(where: { $0.uid == uid }) else {
-            lastFeedback = DeviceActionFeedback(
+            present(DeviceActionFeedback(
                 kind: .notConnected,
                 deviceUID: remembered.uid,
-                deviceName: remembered.name
-            )
+                deviceName: remembered.name,
+                transport: remembered.transport,
+                isVirtual: remembered.isVirtual
+            ))
             return
         }
         switchOutput(to: device)
+    }
+
+    private func present(_ feedback: DeviceActionFeedback) {
+        lastFeedback = feedback
+        HUDController.shared.present(feedback)
     }
 }
