@@ -225,22 +225,6 @@
 
     .store-button.is-coming-soon { cursor: default; }
 
-    .quiet-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-height: 44px;
-      padding: 4px 10px;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .quiet-link svg { width: 15px; height: 15px; }
-    .quiet-link:hover { color: var(--text); }
-    .quiet-link { transition: color .15s ease; }
-
     a.store-button:hover {
       box-shadow: 0 9px 24px rgba(16, 18, 24, .22);
     }
@@ -339,15 +323,10 @@
 
     .check svg { width: 12px; height: 12px; }
 
-    section[id] { scroll-margin-top: 24px; }
-
-    .features {
-      padding: clamp(62px, 9vw, 100px) 0 0;
-    }
-
-    .section-head {
-      max-width: 620px;
-      margin: 0 auto 32px;
+    .shortcut-note {
+      margin: 13px 0 0;
+      color: var(--faint);
+      font-size: 12.5px;
       text-align: center;
     }
 
@@ -357,58 +336,6 @@
       line-height: 1.06;
       letter-spacing: -.045em;
       text-wrap: balance;
-    }
-
-    .section-head p {
-      margin-bottom: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.65;
-      text-wrap: pretty;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .feature {
-      padding: 23px 22px 24px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: var(--surface);
-    }
-
-    .feature-icon {
-      display: grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      margin-bottom: 17px;
-      border-radius: 12px;
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
-
-    .feature-icon svg { width: 20px; height: 20px; }
-
-    .feature h3 {
-      margin-bottom: 6px;
-      font-size: 15px;
-      line-height: 1.3;
-      letter-spacing: -.015em;
-    }
-
-    .feature p {
-      margin-bottom: 0;
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.62;
-      text-wrap: pretty;
     }
 
     .closing {
@@ -454,8 +381,6 @@
     }
 
     @media (max-width: 720px) {
-      .feature-grid { grid-template-columns: 1fr; }
-      .feature { padding: 20px; }
       .footer { justify-content: center; text-align: center; }
     }
 
@@ -529,8 +454,8 @@
 
       <p class="lede">
         SoundHop lives in your menu bar and switches speakers, headphones and AirPods with
-        <strong>Control-Command-1</strong> through <strong>9</strong>. Each shortcut is tied to a device’s
-        permanent identity, so it never lands on the wrong output.
+        a global shortcut. Set one per device, or keep the defaults. Each shortcut is tied to a
+        device’s permanent identity, so it never lands on the wrong output.
       </p>
 
       <div class="actions">
@@ -545,12 +470,6 @@
           </span>
         </span>
 
-        <a class="quiet-link" href="#features">
-          See how it works
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14M13 6l6 6-6 6"/>
-          </svg>
-        </a>
       </div>
 
       <p class="micro">Free · macOS&nbsp;14+ · No account needed</p>
@@ -575,8 +494,8 @@
         </div>
 
         <div class="shortcut-row">
-          <span class="keys" aria-label="Control Command 2">
-            <kbd>⌃</kbd><kbd>⌘</kbd><kbd>2</kbd>
+          <span class="keys" aria-label="Option Command B">
+            <kbd>⌥</kbd><kbd>⌘</kbd><kbd>B</kbd>
           </span>
           <span class="device">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -588,52 +507,13 @@
           </span>
         </div>
       </div>
-    </section>
 
-    <section id="features" class="features" aria-labelledby="features-title">
-      <div class="section-head">
-        <h2 id="features-title">Small app. One less annoyance.</h2>
-        <p>No Control Center, no output menu, no accidentally switching the wrong device.</p>
-      </div>
-
-      <ul class="feature-grid">
-        <li class="feature">
-          <span class="feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M13 2 5 14h6l-1 8 8-12h-6l1-8Z"/>
-            </svg>
-          </span>
-          <h3>Instant switching</h3>
-          <p>Press a shortcut and your Mac hops to the right output. It is just one keystroke away.</p>
-        </li>
-
-        <li class="feature">
-          <span class="feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1.1"/>
-              <path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1.1"/>
-            </svg>
-          </span>
-          <h3>Bound to the device</h3>
-          <p>Shortcuts remember each device's persistent UID, not its position. Reconnect and it still works.</p>
-        </li>
-
-        <li class="feature">
-          <span class="feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3 20 6v5c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6l8-3Z"/>
-              <path d="m9 12 2 2 4-4"/>
-            </svg>
-          </span>
-          <h3>Quietly useful</h3>
-          <p>A tiny optional HUD, launch at login, and no accounts, analytics or tracking. Just the switch.</p>
-        </li>
-      </ul>
+      <p class="shortcut-note">Default shortcuts are ⌃⌘1–9. You can use any shortcut and change it in Settings.</p>
     </section>
 
     <section class="closing" aria-labelledby="closing-title">
-      <h2 id="closing-title">Give your ears a shortcut.</h2>
-      <p>SoundHop is a free menu bar app for macOS&nbsp;14 and later. It is coming to the Mac App Store.</p>
+      <h2 id="closing-title">SoundHop for macOS.</h2>
+      <p>Free, with no accounts or tracking. Coming soon to the Mac App Store.</p>
 
       <!-- APP STORE LINK: replace this span with an <a class="store-button" href="https://apps.apple.com/app/idXXXXXXXX">…</a> when the listing is live. -->
       <span class="store-button is-coming-soon" aria-label="SoundHop is coming soon to the Mac App Store">
