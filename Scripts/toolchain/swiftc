@@ -1,0 +1,18 @@
+#!/bin/sh
+# Xcode invokes compiler wrappers with a nearly empty environment when it
+# compiles Swift package manifests. Supply the paths those tools need, then
+# run the Swift toolchain selected by swiftly (or Xcode's default toolchain).
+set -eu
+
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Xcode.app/Contents/Developer/usr/bin"
+USER_HOME="${HOME:-$(eval echo "~$(/usr/bin/id -un)")}"
+TOOLCHAIN="${SOUNDHOP_SWIFT_TOOLCHAIN:-$USER_HOME/Library/Developer/Toolchains/swift-6.4.1-RELEASE.xctoolchain/usr/bin/swiftc}"
+
+if [ ! -x "$TOOLCHAIN" ]; then
+    TOOLCHAIN="$USER_HOME/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin/swiftc"
+fi
+if [ ! -x "$TOOLCHAIN" ]; then
+    TOOLCHAIN="$(/usr/bin/xcrun --find swiftc)"
+fi
+
+exec "$TOOLCHAIN" "$@"

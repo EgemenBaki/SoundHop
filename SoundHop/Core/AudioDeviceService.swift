@@ -194,8 +194,8 @@ struct AudioDeviceService: Sendable {
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain
         )
-        var value: CFString = "" as CFString
-        var dataSize = UInt32(MemoryLayout<CFString>.size)
+        var value: Unmanaged<CFString>?
+        var dataSize = UInt32(MemoryLayout<Unmanaged<CFString>?>.size)
         let status = AudioObjectGetPropertyData(
             objectID,
             &address,
@@ -204,8 +204,8 @@ struct AudioDeviceService: Sendable {
             &dataSize,
             &value
         )
-        guard status == noErr else { return nil }
-        return value as String
+        guard status == noErr, let value else { return nil }
+        return value.takeUnretainedValue() as String
     }
 
     private func uint32Property(

@@ -8,17 +8,20 @@ struct SoundHopApp: App {
 
     var body: some Scene {
         MenuBarExtra("SoundHop", systemImage: "hifispeaker.2") {
-            if let error = store.lastError {
+            if let feedback = store.lastFeedback {
+                Text(feedback.message)
+                Divider()
+            } else if let error = store.lastError {
                 Text(error)
                 Divider()
             }
 
-            if store.devices.isEmpty {
+            if store.orderedConnectedDevices.isEmpty {
                 Text("No output devices")
             } else {
-                ForEach(store.devices) { device in
+                ForEach(store.orderedConnectedDevices) { device in
                     Toggle(
-                        device.name,
+                        label(for: device),
                         isOn: Binding(
                             get: { store.defaultOutputUID == device.uid },
                             set: { isOn in
@@ -36,5 +39,19 @@ struct SoundHopApp: App {
             Button("Quit SoundHop") { NSApplication.shared.terminate(nil) }
         }
         .menuBarExtraStyle(.menu)
+    }
+
+    private func label(for device: AudioDevice) -> String {
+        let duplicateNameCount = store.orderedConnectedDevices.filter {
+            $0.name == device.name
+        }.count
+        let name = duplicateNameCount > 1
+            ? "\(device.name) (\(device.transport.displayName))"
+            : device.name
+
+        guard let shortcut = store.shortcut(forUID: device.uid) else {
+            return name
+        }
+        return "\(name) — \(shortcut.description)"
     }
 }

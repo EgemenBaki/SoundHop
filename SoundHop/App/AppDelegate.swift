@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import KeyboardShortcuts
 
 /// Temporary launch-argument harness for the sandbox spike.
 ///
@@ -9,6 +10,7 @@ import Foundation
 ///
 /// This lets us verify HAL access without needing to drive the menu bar. It
 /// will be removed once the spike is confirmed.
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard let command = SpikeCommand(arguments: CommandLine.arguments) else {
@@ -20,6 +22,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             listDevices()
         case let .switchTo(uid, moveSystemOutput):
             switchOutput(to: uid, moveSystemOutput: moveSystemOutput)
+        case .shortcuts:
+            listShortcuts()
+        case .watch:
+            watchDeviceChanges()
         }
 
         exit(EXIT_SUCCESS)
@@ -53,6 +59,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func watchDeviceChanges() {
+        let monitor = AudioDeviceMonitor {
+            print("HAL change received at \(Date())")
+        }
+        monitor.start()
+        print("watching HAL for 5 seconds")
+        RunLoop.main.run(until: Date().addingTimeInterval(5))
+        monitor.stop()
+    }
+
+    private func listShortcuts() {
+        let store = DeviceStore()
+        print("remembered devices (\(store.rememberedDevices.count)):")
+        for device in store.rememberedDevices {
+            let name = DeviceShortcuts.name(forUID: device.uid)
+            let shortcut = KeyboardShortcuts.getShortcut(for: name)
+            let isEnabled = KeyboardShortcuts.isEnabled(for: name)
+            print("- \(device.name) | ordinal \(device.firstSeenOrdinal) | connected: \(store.isConnected(device.uid)) | shortcut: \(shortcut?.description ?? "none") | enabled: \(isEnabled)")
+        }
+    }
+
     private func switchOutput(to uid: String, moveSystemOutput: Bool) {
         let service = AudioDeviceService()
         do {
@@ -82,6 +109,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 private enum SpikeCommand {
     case list
     case switchTo(uid: String, moveSystemOutput: Bool)
+    case shortcuts
+    case watch
 
     init?(arguments: [String]) {
         guard arguments.count >= 2 else { return nil }
@@ -89,6 +118,10 @@ private enum SpikeCommand {
         switch arguments[1] {
         case "--spike-list":
             self = .list
+        case "--spike-shortcuts":
+            self = .shortcuts
+        case "--spike-watch":
+            self = .watch
         case "--spike-switch" where arguments.count >= 3:
             self = .switchTo(
                 uid: arguments[2],
