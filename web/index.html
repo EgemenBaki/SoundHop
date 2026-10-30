@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SoundHop — Switch Mac sound output with a shortcut</title>
-  <meta name="description" content="A tiny macOS menu bar app that switches speakers, AirPods, Apple TV and more with a global shortcut. Free, private, and made for macOS.">
+  <meta name="description" content="A free, open-source macOS menu bar app that switches speakers, AirPods, Apple TV and more with a global shortcut.">
   <meta name="author" content="Egemen Baki">
   <meta name="application-name" content="SoundHop">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0b0d13" media="(prefers-color-scheme: dark)">
-  <link rel="canonical" href="https://egemenbaki.com.tr/soundhop/">
+  <link rel="canonical" href="https://egemenbaki.com.tr/soundhop">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SoundHop">
   <meta property="og:locale" content="en_US">
   <meta property="og:title" content="SoundHop — Switch Mac sound output with a shortcut">
-  <meta property="og:description" content="A tiny macOS menu bar app for switching speakers, AirPods, Apple TV and more with a global shortcut. Free and private.">
-  <meta property="og:url" content="https://egemenbaki.com.tr/soundhop/">
+  <meta property="og:description" content="A free, open-source macOS menu bar app for switching speakers, AirPods, Apple TV and more with a global shortcut.">
+  <meta property="og:url" content="https://egemenbaki.com.tr/soundhop">
   <meta property="og:image" content="https://egemenbaki.com.tr/soundhop/og-image.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
@@ -26,7 +26,7 @@
   <meta property="og:image:alt" content="SoundHop app icon and the tagline: switch your Mac's sound output with a shortcut.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SoundHop — Switch Mac sound output with a shortcut">
-  <meta name="twitter:description" content="A tiny macOS menu bar app for switching speakers, AirPods, Apple TV and more with a global shortcut. Free and private.">
+  <meta name="twitter:description" content="A free, open-source macOS menu bar app for switching speakers, AirPods, Apple TV and more with a global shortcut.">
   <meta name="twitter:image" content="https://egemenbaki.com.tr/soundhop/og-image.jpg">
   <meta name="twitter:image:alt" content="SoundHop app icon and tagline.">
 
@@ -49,8 +49,8 @@
       --border-strong: rgba(20, 25, 40, .16);
       --accent: #3a51d8;
       --accent-soft: #e9edff;
-      --store-bg: #101218;
-      --store-text: #ffffff;
+      --button-bg: #101218;
+      --button-text: #ffffff;
       --shadow: 0 20px 55px rgba(28, 35, 70, .10);
     }
 
@@ -68,8 +68,8 @@
         --border-strong: rgba(255, 255, 255, .17);
         --accent: #a4b4ff;
         --accent-soft: rgba(112, 132, 255, .16);
-        --store-bg: #f5f6fa;
-        --store-text: #0b0d13;
+        --button-bg: #f5f6fa;
+        --button-text: #0b0d13;
         --shadow: 0 24px 65px rgba(0, 0, 0, .38);
       }
     }
@@ -191,7 +191,7 @@
       margin: 28px auto 0;
     }
 
-    .store-button {
+    .download-button {
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -199,8 +199,8 @@
       padding: 8px 18px;
       border: 1px solid transparent;
       border-radius: 14px;
-      background: var(--store-bg);
-      color: var(--store-text);
+      background: var(--button-bg);
+      color: var(--button-text);
       box-shadow: 0 6px 20px rgba(16, 18, 24, .16);
       font-size: 14px;
       font-weight: 650;
@@ -208,13 +208,13 @@
       text-decoration: none;
     }
 
-    .store-button svg {
+    .download-button svg {
       width: 20px;
       height: 20px;
       flex: none;
     }
 
-    .store-button small {
+    .download-button small {
       display: block;
       margin-bottom: 2px;
       font-size: 9px;
@@ -223,19 +223,46 @@
       opacity: .7;
     }
 
-    .store-button.is-coming-soon { cursor: default; }
-
-    a.store-button:hover {
+    a.download-button:hover {
       box-shadow: 0 9px 24px rgba(16, 18, 24, .22);
     }
 
-    a.store-button { transition: box-shadow .15s ease; }
+    a.download-button { transition: box-shadow .15s ease; }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 4px 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .15s ease;
+    }
+
+    .source-link svg { width: 15px; height: 15px; flex: none; }
+    .source-link:hover { color: var(--text); }
 
     .micro {
       margin: 14px 0 0;
       color: var(--faint);
       font-size: 12.5px;
     }
+
+    .download-note {
+      margin: 6px 0 0;
+      color: var(--faint);
+      font-size: 11.5px;
+    }
+
+    .download-note a {
+      color: inherit;
+      text-underline-offset: 2px;
+    }
+
+    .download-note a:hover { color: var(--text); }
 
     .shortcut-demo {
       max-width: 590px;
@@ -358,7 +385,7 @@
       line-height: 1.6;
     }
 
-    .closing .store-button { margin-inline: auto; }
+    .closing .download-button { margin-inline: auto; }
 
     footer {
       display: flex;
@@ -373,6 +400,14 @@
     }
 
     footer p { margin: 0; }
+
+    .footer-link {
+      color: inherit;
+      text-decoration: none;
+      transition: color .15s ease;
+    }
+
+    .footer-link:hover { color: var(--text); }
 
     a:focus-visible {
       outline: 3px solid var(--accent);
@@ -389,7 +424,7 @@
       .hero { padding-top: 46px; }
       .app-icon { width: 82px; height: 82px; border-radius: 20px; }
       .actions { flex-direction: column; }
-      .store-button { min-height: 48px; }
+      .download-button { min-height: 48px; }
       .shortcut-row { gap: 9px; padding-inline: 9px; }
       .device-name { font-size: 13px; }
       kbd { min-width: 23px; height: 23px; font-size: 11px; }
@@ -409,13 +444,17 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "SoundHop",
-    "description": "A tiny macOS menu bar app for switching speakers, AirPods, Apple TV and other sound output devices with a global keyboard shortcut.",
-    "url": "https://egemenbaki.com.tr/soundhop/",
+    "description": "A free, open-source macOS menu bar app for switching speakers, AirPods, Apple TV and other sound output devices with a global keyboard shortcut.",
+    "url": "https://egemenbaki.com.tr/soundhop",
     "image": "https://egemenbaki.com.tr/soundhop/icon-512.png",
+    "downloadUrl": "https://github.com/EgemenBaki/SoundHop/releases/latest/download/SoundHop.dmg",
+    "codeRepository": "https://github.com/EgemenBaki/SoundHop",
+    "license": "https://github.com/EgemenBaki/SoundHop/blob/main/LICENSE",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "macOS 14 or later",
     "inLanguage": "en",
     "isAccessibleForFree": true,
+    "softwareVersion": "1.0",
     "author": {
       "@type": "Person",
       "name": "Egemen Baki",
@@ -432,7 +471,8 @@
       "Shortcuts stay bound to each device's persistent identifier",
       "Lives in the macOS menu bar",
       "Optional compact on-screen HUD",
-      "No account, no analytics, no tracking"
+      "No account, no analytics, no tracking",
+      "Open source under the MIT license"
     ]
   }
   </script>
@@ -446,7 +486,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
           <path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/>
         </svg>
-        Menu bar app for macOS
+        Open-source menu bar app for macOS
       </p>
 
       <img class="app-icon" src="icon-96.png" srcset="icon-96.png 1x, icon-192.png 2x" width="92" height="92" alt="SoundHop app icon" fetchpriority="high" decoding="async">
@@ -460,20 +500,28 @@
       </p>
 
       <div class="actions">
-        <!-- APP STORE LINK: replace this span with an <a class="store-button" href="https://apps.apple.com/app/idXXXXXXXX">…</a> when the listing is live. -->
-        <span class="store-button is-coming-soon" aria-label="SoundHop is coming soon to the Mac App Store">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01M12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+        <a class="download-button" href="https://github.com/EgemenBaki/SoundHop/releases/latest/download/SoundHop.dmg" aria-label="Download SoundHop for macOS">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12m0 0 4-4m-4 4-4-4"/>
+            <path d="M5 19h14"/>
           </svg>
           <span>
-            <small>Coming soon on the</small>
-            Mac App Store
+            <small>Download for</small>
+            macOS
           </span>
-        </span>
+        </a>
+
+        <a class="source-link" href="https://github.com/EgemenBaki/SoundHop" target="_blank" rel="noopener noreferrer">
+          View source
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
 
       </div>
 
-      <p class="micro">Free · macOS&nbsp;14+ · No account needed</p>
+      <p class="micro">Free · Open source · macOS&nbsp;14+</p>
+      <p class="download-note">Not notarized by Apple. <a href="https://github.com/EgemenBaki/SoundHop/blob/main/INSTALL.md" target="_blank" rel="noopener noreferrer">Install notes</a>.</p>
 
       <div class="shortcut-demo" role="group" aria-label="Example SoundHop shortcuts">
         <div class="shortcut-row is-current">
@@ -540,24 +588,28 @@
 
     <section class="closing" aria-labelledby="closing-title">
       <h2 id="closing-title">SoundHop for macOS.</h2>
-      <p>Free, with no accounts or tracking. Coming soon to the Mac App Store.</p>
+      <p>Free and open source. Download the latest release for macOS&nbsp;14 and later.</p>
 
-      <!-- APP STORE LINK: replace this span with an <a class="store-button" href="https://apps.apple.com/app/idXXXXXXXX">…</a> when the listing is live. -->
-      <span class="store-button is-coming-soon" aria-label="SoundHop is coming soon to the Mac App Store">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01M12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+      <a class="download-button" href="https://github.com/EgemenBaki/SoundHop/releases/latest/download/SoundHop.dmg" aria-label="Download SoundHop for macOS">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12m0 0 4-4m-4 4-4-4"/>
+          <path d="M5 19h14"/>
         </svg>
         <span>
-          <small>Coming soon on the</small>
-          Mac App Store
+          <small>Download for</small>
+          macOS
         </span>
-      </span>
+      </a>
     </section>
   </main>
 
   <footer class="page">
-    <p>© 2026 Egemen Baki</p>
-    <p>Made for macOS · No cookies, no analytics.</p>
+    <p>© 2026 Egemen Baki · <a class="footer-link" href="https://github.com/EgemenBaki/SoundHop/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></p>
+    <p>
+      <a class="footer-link" href="https://github.com/EgemenBaki/SoundHop/blob/main/INSTALL.md" target="_blank" rel="noopener noreferrer">Install notes</a>
+      · <a class="footer-link" href="https://github.com/EgemenBaki/SoundHop" target="_blank" rel="noopener noreferrer">Source</a>
+      · No cookies, no analytics.
+    </p>
   </footer>
 </body>
 </html>

@@ -1,36 +1,42 @@
 # SoundHop website
 
-Static, single-page site for SoundHop. No build step, no JavaScript, no
-external requests.
+Static, single-page site for SoundHop. No build step in this folder, no
+JavaScript, no external requests.
 
 ## Deploy
 
-Upload the contents of this folder to:
+The page lives in the portfolio site at:
 
 ```text
-https://egemenbaki.com.tr/soundhop/
+https://egemenbaki.com.tr/soundhop
 ```
 
-The canonical URL, Open Graph URL, JSON-LD URL and sitemap all assume that
-path. If it changes, update those values in `index.html` and `sitemap.xml`.
+The integrated copy is served from `public/soundhop/` through a rewrite in the
+portfolio's `next.config.ts`. If you deploy the `web/` folder separately,
+upload its contents to a `/soundhop/` directory and keep the URL layout the
+same.
 
-Place `robots.txt` at the domain root (`https://egemenbaki.com.tr/robots.txt`).
-If the portfolio already has one, add only the `Sitemap:` line instead of
-replacing the file.
+Update the canonical, Open Graph, JSON-LD and sitemap URLs if the path changes.
 
-## App Store link
+## Download link
 
-The download buttons are currently non-interactive “Coming soon on the Mac App
-Store” badges because there is no listing yet. When the App Store page exists,
-replace each placeholder span in `index.html` with:
+The download buttons point to the latest GitHub release asset:
 
-```html
-<a class="store-button" href="https://apps.apple.com/app/idXXXXXXXX" rel="noopener">
-  …same icon and label…
-</a>
+```text
+https://github.com/EgemenBaki/SoundHop/releases/latest/download/SoundHop.dmg
 ```
 
-Search for `APP STORE LINK` in `index.html`.
+Keep the release asset name exactly `SoundHop.dmg`. The link automatically
+resolves to the latest release.
+
+Release instructions live in the SoundHop repository at
+`RELEASING.md`.
+
+## Installation note
+
+The release is ad-hoc signed and not notarized by Apple. On first launch macOS
+may ask the user to approve it in **System Settings → Privacy & Security**. The
+page should not imply that the app is notarized or approved by Apple.
 
 ## Performance
 
@@ -47,9 +53,9 @@ social preview image, which only crawlers download.
 ## SEO checklist
 
 - Update the canonical/OG/sitemap URLs if the page path changes.
-- After deploying, submit `https://egemenbaki.com.tr/soundhop/` in Google Search
-  Console and request indexing.
+- After deploying, submit the page in Google Search Console and request
+  indexing.
 - Test the Open Graph preview with the LinkedIn Post Inspector or Facebook
   Sharing Debugger.
-- Keep the title under ~60 characters and the description under ~160
+- Keep the title under about 60 characters and the description under about 160
   characters when editing.

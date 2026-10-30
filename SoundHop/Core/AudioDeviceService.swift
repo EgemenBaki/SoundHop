@@ -65,17 +65,13 @@ struct AudioDeviceService: Sendable {
     }
 
     func defaultOutputDeviceUID() throws -> String? {
-        let deviceID: AudioDeviceID = try systemProperty(
-            selector: kAudioHardwarePropertyDefaultOutputDevice
-        )
+        let deviceID = try defaultDeviceID(selector: kAudioHardwarePropertyDefaultOutputDevice)
         guard deviceID != kAudioObjectUnknown else { return nil }
         return stringProperty(deviceID, selector: kAudioDevicePropertyDeviceUID)
     }
 
     func defaultSystemOutputDeviceUID() throws -> String? {
-        let deviceID: AudioDeviceID = try systemProperty(
-            selector: kAudioHardwarePropertyDefaultSystemOutputDevice
-        )
+        let deviceID = try defaultDeviceID(selector: kAudioHardwarePropertyDefaultSystemOutputDevice)
         guard deviceID != kAudioObjectUnknown else { return nil }
         return stringProperty(deviceID, selector: kAudioDevicePropertyDeviceUID)
     }
@@ -93,17 +89,15 @@ struct AudioDeviceService: Sendable {
             throw ServiceError.deviceNotFound(uid: uid)
         }
 
-        var mutableDeviceID = deviceID
-        try setSystemProperty(
-            selector: kAudioHardwarePropertyDefaultOutputDevice,
-            value: &mutableDeviceID
+        try setSystemDevice(
+            deviceID,
+            selector: kAudioHardwarePropertyDefaultOutputDevice
         )
 
         if moveSystemOutput {
-            var systemDeviceID = deviceID
-            try setSystemProperty(
-                selector: kAudioHardwarePropertyDefaultSystemOutputDevice,
-                value: &systemDeviceID
+            try setSystemDevice(
+                deviceID,
+                selector: kAudioHardwarePropertyDefaultSystemOutputDevice
             )
         }
 
@@ -230,27 +224,25 @@ struct AudioDeviceService: Sendable {
         return status == noErr ? value : nil
     }
 
-    private func systemProperty<T>(
+    private func defaultDeviceID(
         selector: AudioObjectPropertySelector
-    ) throws -> T {
+    ) throws -> AudioDeviceID {
         var address = AudioObjectPropertyAddress(
             mSelector: selector,
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain
         )
-        var value: T?
-        var dataSize = UInt32(MemoryLayout<T>.size)
-        let status = withUnsafeMutablePointer(to: &value) { pointer in
-            AudioObjectGetPropertyData(
-                Self.systemObject,
-                &address,
-                0,
-                nil,
-                &dataSize,
-                pointer
-            )
-        }
-        guard status == noErr, let value else {
+        var value: AudioDeviceID = kAudioObjectUnknown
+        var dataSize = UInt32(MemoryLayout<AudioDeviceID>.size)
+        let status = AudioObjectGetPropertyData(
+            Self.systemObject,
+            &address,
+            0,
+            nil,
+            &dataSize,
+            &value
+        )
+        guard status == noErr else {
             throw ServiceError.propertyReadFailed(
                 selector: Self.selectorName(selector),
                 status: status
@@ -259,26 +251,25 @@ struct AudioDeviceService: Sendable {
         return value
     }
 
-    private func setSystemProperty<T>(
-        selector: AudioObjectPropertySelector,
-        value: inout T
+    private func setSystemDevice(
+        _ deviceID: AudioDeviceID,
+        selector: AudioObjectPropertySelector
     ) throws {
         var address = AudioObjectPropertyAddress(
             mSelector: selector,
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain
         )
-        let dataSize = UInt32(MemoryLayout<T>.size)
-        let status = withUnsafePointer(to: &value) { pointer in
-            AudioObjectSetPropertyData(
-                Self.systemObject,
-                &address,
-                0,
-                nil,
-                dataSize,
-                pointer
-            )
-        }
+        var value = deviceID
+        let dataSize = UInt32(MemoryLayout<AudioDeviceID>.size)
+        let status = AudioObjectSetPropertyData(
+            Self.systemObject,
+            &address,
+            0,
+            nil,
+            dataSize,
+            &value
+        )
         guard status == noErr else {
             throw ServiceError.propertyWriteFailed(
                 selector: Self.selectorName(selector),

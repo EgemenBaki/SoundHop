@@ -14,11 +14,9 @@ final class AboutWindowController: NSWindowController, NSWindowDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func show(tipJar: TipJarStore) {
-        tipJar.prepareForPresentation()
-
+    func show() {
         if window == nil {
-            configureWindow(tipJar: tipJar)
+            configureWindow()
         }
 
         guard let window else { return }
@@ -42,8 +40,8 @@ final class AboutWindowController: NSWindowController, NSWindowDelegate {
         }
     }
 
-    private func configureWindow(tipJar: TipJarStore) {
-        let content = NSHostingController(rootView: AboutView(tipJar: tipJar))
+    private func configureWindow() {
+        let content = NSHostingController(rootView: AboutView())
         let window = NSWindow(contentViewController: content)
         window.title = "About SoundHop"
         window.styleMask = [.titled, .closable, .fullSizeContentView]
@@ -53,9 +51,9 @@ final class AboutWindowController: NSWindowController, NSWindowDelegate {
         window.isReleasedWhenClosed = false
         window.delegate = self
         window.collectionBehavior = [.moveToActiveSpace]
-        window.setContentSize(NSSize(width: 460, height: 580))
-        window.minSize = NSSize(width: 460, height: 580)
-        window.maxSize = NSSize(width: 460, height: 580)
+        window.setContentSize(NSSize(width: 460, height: 460))
+        window.minSize = NSSize(width: 460, height: 460)
+        window.maxSize = NSSize(width: 460, height: 460)
         self.window = window
     }
 }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A10000000000000000000020 /* SoundHopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* SoundHopApp.swift */; };
-		A10000000000000000000021 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* AppDelegate.swift */; };
 		A10000000000000000000022 /* DeviceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* DeviceStore.swift */; };
 		A10000000000000000000023 /* AudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* AudioDevice.swift */; };
 		A10000000000000000000024 /* AudioDeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000015 /* AudioDeviceService.swift */; };
@@ -27,17 +26,13 @@
 		A40000000000000000000022 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000013 /* SettingsView.swift */; };
 		A40000000000000000000023 /* LaunchAtLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000014 /* LaunchAtLoginController.swift */; };
 		A40000000000000000000024 /* SettingsOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000015 /* SettingsOpener.swift */; };
-		A50000000000000000000020 /* TipJarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50000000000000000000011 /* TipJarStore.swift */; };
 		A50000000000000000000021 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50000000000000000000012 /* AboutView.swift */; };
 		A50000000000000000000022 /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50000000000000000000013 /* AboutWindowController.swift */; };
-		A60000000000000000000020 /* TipJarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60000000000000000000011 /* TipJarTests.swift */; };
-		A60000000000000000000021 /* SoundHop.storekit in Resources */ = {isa = PBXBuildFile; fileRef = A50000000000000000000010 /* SoundHop.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A10000000000000000000010 /* SoundHop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundHop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000000000011 /* SoundHopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundHopApp.swift; sourceTree = "<group>"; };
-		A10000000000000000000012 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A10000000000000000000013 /* DeviceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStore.swift; sourceTree = "<group>"; };
 		A10000000000000000000014 /* AudioDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDevice.swift; sourceTree = "<group>"; };
 		A10000000000000000000015 /* AudioDeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDeviceService.swift; sourceTree = "<group>"; };
@@ -57,11 +52,8 @@
 		A40000000000000000000013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A40000000000000000000014 /* LaunchAtLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginController.swift; sourceTree = "<group>"; };
 		A40000000000000000000015 /* SettingsOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOpener.swift; sourceTree = "<group>"; };
-		A50000000000000000000010 /* SoundHop.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = SoundHop.storekit; sourceTree = "<group>"; };
-		A50000000000000000000011 /* TipJarStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJarStore.swift; sourceTree = "<group>"; };
 		A50000000000000000000012 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		A50000000000000000000013 /* AboutWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindowController.swift; sourceTree = "<group>"; };
-		A60000000000000000000011 /* TipJarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJarTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +81,6 @@
 			children = (
 				A10000000000000000000004 /* SoundHop */,
 				A30000000000000000000004 /* SoundHopTests */,
-				A50000000000000000000010 /* SoundHop.storekit */,
 				A10000000000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,14 +109,12 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000011 /* SoundHopApp.swift */,
-				A10000000000000000000012 /* AppDelegate.swift */,
 				A10000000000000000000013 /* DeviceStore.swift */,
 				A40000000000000000000011 /* DevicePresentation.swift */,
 				A40000000000000000000012 /* HUDController.swift */,
 				A40000000000000000000013 /* SettingsView.swift */,
 				A40000000000000000000014 /* LaunchAtLoginController.swift */,
 				A40000000000000000000015 /* SettingsOpener.swift */,
-				A50000000000000000000011 /* TipJarStore.swift */,
 				A50000000000000000000012 /* AboutView.swift */,
 				A50000000000000000000013 /* AboutWindowController.swift */,
 			);
@@ -168,7 +157,6 @@
 			children = (
 				A30000000000000000000011 /* DeviceLibraryTests.swift */,
 				A30000000000000000000012 /* DeviceShortcutTests.swift */,
-				A60000000000000000000011 /* TipJarTests.swift */,
 			);
 			path = SoundHopTests;
 			sourceTree = "<group>";
@@ -271,7 +259,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A60000000000000000000021 /* SoundHop.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +270,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000020 /* SoundHopApp.swift in Sources */,
-				A10000000000000000000021 /* AppDelegate.swift in Sources */,
 				A10000000000000000000022 /* DeviceStore.swift in Sources */,
 				A10000000000000000000023 /* AudioDevice.swift in Sources */,
 				A10000000000000000000024 /* AudioDeviceService.swift in Sources */,
@@ -297,7 +283,6 @@
 				A40000000000000000000022 /* SettingsView.swift in Sources */,
 				A40000000000000000000023 /* LaunchAtLoginController.swift in Sources */,
 				A40000000000000000000024 /* SettingsOpener.swift in Sources */,
-				A50000000000000000000020 /* TipJarStore.swift in Sources */,
 				A50000000000000000000021 /* AboutView.swift in Sources */,
 				A50000000000000000000022 /* AboutWindowController.swift in Sources */,
 			);
@@ -309,7 +294,6 @@
 			files = (
 				A30000000000000000000020 /* DeviceLibraryTests.swift in Sources */,
 				A30000000000000000000021 /* DeviceShortcutTests.swift in Sources */,
-				A60000000000000000000020 /* TipJarTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +382,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SoundHop/Support/SoundHop.entitlements;
 				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;

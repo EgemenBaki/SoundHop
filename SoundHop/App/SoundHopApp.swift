@@ -3,9 +3,7 @@ import SwiftUI
 
 @main
 struct SoundHopApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var store = DeviceStore()
-    @StateObject private var tipJar = TipJarStore()
 
     var body: some Scene {
         // Must precede the Settings scene: SwiftUI needs a rendered scene for
@@ -17,7 +15,7 @@ struct SoundHopApp: App {
         .defaultSize(width: 1, height: 1)
 
         MenuBarExtra("SoundHop", systemImage: "hifispeaker.2") {
-            MenuBarContent(store: store, tipJar: tipJar)
+            MenuBarContent(store: store)
         }
         .menuBarExtraStyle(.menu)
 
@@ -35,7 +33,6 @@ struct SoundHopApp: App {
 
 private struct MenuBarContent: View {
     @ObservedObject var store: DeviceStore
-    let tipJar: TipJarStore
 
     var body: some View {
         if let error = store.lastError {
@@ -67,8 +64,8 @@ private struct MenuBarContent: View {
             SettingsOpener.open()
         }
 
-        Button("About & Tip Jar…") {
-            AboutWindowController.shared.show(tipJar: tipJar)
+        Button("About SoundHop…") {
+            AboutWindowController.shared.show()
         }
 
         Divider()
