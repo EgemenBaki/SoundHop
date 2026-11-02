@@ -12,27 +12,54 @@ https://github.com/EgemenBaki/SoundHop/releases/latest
 
 1. Open `SoundHop.dmg`.
 2. Drag **SoundHop** into the **Applications** folder.
-3. Open SoundHop from Applications.
-4. Click the speaker icon in the macOS menu bar.
+3. Eject the DMG.
+4. Open SoundHop from Applications.
+5. Click the speaker icon in the macOS menu bar.
 
 SoundHop has no Dock icon and no main window. It lives in the menu bar.
 
-## If macOS says it cannot verify the app
+## First launch: macOS may block the app
 
-The current release is ad-hoc signed but not notarized by Apple. macOS may show
-a warning the first time you open it.
+The current release is **ad-hoc signed but not notarized by Apple**. macOS
+Gatekeeper may show a dialog saying:
 
-1. Try to open SoundHop.
+> “SoundHop” Not Opened — Apple could not verify “SoundHop” is free of malware.
+
+**This is expected. The app is not damaged.**
+
+1. Click **Done**. Do **not** click “Move to Trash.”
 2. Open **System Settings → Privacy & Security**.
-3. Scroll down to the security message about SoundHop.
-4. Click **Open Anyway**.
-5. Confirm.
+3. Scroll down to the **Security** section.
+4. Find the message about **SoundHop** and click **Open Anyway**.
+5. Confirm with Touch ID or your password, then click **Open**.
+6. Open SoundHop again from Applications.
+
+This only needs to be done once. After approval, SoundHop opens normally.
 
 Do not disable Gatekeeper globally.
 
-This warning exists because notarization requires a paid Apple Developer
-Program membership. The source is public, so you can inspect it or build it
-yourself.
+### Terminal alternative
+
+If you are comfortable with Terminal, you can remove the quarantine flag from
+this one app:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/SoundHop.app
+open /Applications/SoundHop.app
+```
+
+This does not change any global security setting.
+
+### Why can't the app ask for permission itself?
+
+macOS blocks the app **before any of its code runs**, so it cannot show its own
+“please allow me” prompt. There is no public API for an app or installer to
+request Gatekeeper approval. The approval must come from macOS and the user.
+
+The only way to make the app open without this warning for every user is to
+notarize it with Apple. That requires a paid Apple Developer Program membership
+and a Developer ID certificate. This open-source build intentionally avoids
+that cost, so the first-launch approval is required.
 
 ## Build from source
 
@@ -57,5 +84,5 @@ No Apple Developer account is needed to build it locally.
 ## Uninstall
 
 Quit SoundHop from its menu bar menu, then delete `SoundHop.app` from
-Applications. Remove its local data by deleting the app's container if you want
-to clear remembered devices and preferences.
+Applications. To clear remembered devices and preferences, remove the app’s
+local container as well.

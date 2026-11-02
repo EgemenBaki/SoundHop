@@ -15,13 +15,24 @@ persistent Core Audio UID, so it stays with the right device when you reconnect.
 
 SoundHop requires **macOS 14 or later**.
 
-See [INSTALL.md](INSTALL.md) for download, installation and first-launch
-instructions.
+1. Download the latest release and open `SoundHop.dmg`.
+2. Drag **SoundHop** into Applications.
+3. Open SoundHop from Applications.
 
-The current release is **ad-hoc signed but not notarized** by Apple. macOS may
-show a security warning on first launch. The install guide explains how to
-approve the app in System Settings. This is the trade-off of publishing without
-a paid Apple Developer Program membership.
+The current release is **ad-hoc signed but not notarized** by Apple. On first
+launch, macOS may say that it cannot verify SoundHop. This is expected:
+
+1. Click **Done** — not “Move to Trash.”
+2. Open **System Settings → Privacy & Security**.
+3. Find the message about SoundHop under **Security** and click **Open Anyway**.
+4. Confirm, then open SoundHop from Applications.
+
+This is a one-time approval. The app cannot ask for it itself because macOS
+blocks the app before its code runs. Removing the warning for all users would
+require notarization and a paid Apple Developer Program membership.
+
+See [INSTALL.md](INSTALL.md) for details, the Terminal alternative and build
+instructions.
 
 ## Features
 

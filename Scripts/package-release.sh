@@ -51,11 +51,17 @@ SoundHop $VERSION
 SoundHop requires macOS 14 or later.
 
 This build is ad-hoc signed and not notarized by Apple. On first launch macOS
-may block it. Open System Settings → Privacy & Security, find the message
-about SoundHop, and click "Open Anyway".
+may show "SoundHop Not Opened." This is expected.
 
-Source and installation notes:
-https://github.com/EgemenBaki/SoundHop
+1. Click Done. Do NOT click Move to Trash.
+2. Open System Settings → Privacy & Security.
+3. Find the SoundHop message under Security and click Open Anyway.
+4. Confirm, then open SoundHop from Applications.
+
+This only needs to be done once. Do not disable Gatekeeper globally.
+
+Full installation notes:
+https://github.com/EgemenBaki/SoundHop/blob/main/INSTALL.md
 EOF
 
 rm -f "$DIST_DIR/SoundHop.dmg" "$DIST_DIR/SoundHop.dmg.sha256"

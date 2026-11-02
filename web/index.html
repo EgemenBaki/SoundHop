@@ -357,6 +357,105 @@
       text-align: center;
     }
 
+    section[id] { scroll-margin-top: 24px; }
+
+    .install {
+      padding: clamp(62px, 9vw, 100px) 0 0;
+    }
+
+    .install-head {
+      max-width: 640px;
+      margin: 0 auto 28px;
+      text-align: center;
+    }
+
+    .install-kicker {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .install-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+
+    .install-card {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 4px 22px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--surface);
+    }
+
+    .install-steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .install-step {
+      display: flex;
+      gap: 14px;
+      padding: 18px 0;
+    }
+
+    .install-step + .install-step {
+      border-top: 1px solid var(--border);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .install-step h3 {
+      margin: 1px 0 3px;
+      font-size: 14.5px;
+      letter-spacing: -.01em;
+    }
+
+    .install-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.6;
+      text-wrap: pretty;
+    }
+
+    .install-step strong { color: var(--text); }
+
+    .install-reason {
+      max-width: 620px;
+      margin: 18px auto 0;
+      color: var(--faint);
+      font-size: 12.5px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .install-reason a {
+      color: inherit;
+      text-underline-offset: 2px;
+    }
+
+    .install-reason a:hover { color: var(--text); }
+
     h2 {
       margin-bottom: 12px;
       font-size: clamp(1.8rem, 3.6vw, 2.55rem);
@@ -428,6 +527,8 @@
       .shortcut-row { gap: 9px; padding-inline: 9px; }
       .device-name { font-size: 13px; }
       kbd { min-width: 23px; height: 23px; font-size: 11px; }
+      .install-card { padding-inline: 16px; }
+      .install-step { gap: 11px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -521,7 +622,7 @@
       </div>
 
       <p class="micro">Free · Open source · macOS&nbsp;14+</p>
-      <p class="download-note">Not notarized by Apple. <a href="https://github.com/EgemenBaki/SoundHop/blob/main/INSTALL.md" target="_blank" rel="noopener noreferrer">Install notes</a>.</p>
+      <p class="download-note">Not notarized by Apple. <a href="#install">See first-launch steps</a>.</p>
 
       <div class="shortcut-demo" role="group" aria-label="Example SoundHop shortcuts">
         <div class="shortcut-row is-current">
@@ -586,6 +687,49 @@
       <p class="shortcut-note">Default shortcuts are ⌃⌘1–9. You can use any shortcut and change it in Settings.</p>
     </section>
 
+    <section id="install" class="install" aria-labelledby="install-title">
+      <div class="install-head">
+        <p class="install-kicker">First launch</p>
+        <h2 id="install-title">macOS may ask you to approve SoundHop once.</h2>
+        <p>This build is not notarized by Apple, so macOS may block it the first time. It is not damaged, and you only need to approve it once.</p>
+      </div>
+
+      <div class="install-card">
+        <ol class="install-steps">
+          <li class="install-step">
+            <span class="step-number">1</span>
+            <div>
+              <h3>Install the app</h3>
+              <p>Open the DMG and drag SoundHop into Applications.</p>
+            </div>
+          </li>
+          <li class="install-step">
+            <span class="step-number">2</span>
+            <div>
+              <h3>Try to open it</h3>
+              <p>If macOS says “SoundHop Not Opened,” click <strong>Done</strong> — not Move to Trash.</p>
+            </div>
+          </li>
+          <li class="install-step">
+            <span class="step-number">3</span>
+            <div>
+              <h3>Approve it</h3>
+              <p>Open System Settings → Privacy &amp; Security, find SoundHop under Security, and click <strong>Open Anyway</strong>.</p>
+            </div>
+          </li>
+          <li class="install-step">
+            <span class="step-number">4</span>
+            <div>
+              <h3>Open again</h3>
+              <p>Confirm, then open SoundHop from Applications. The speaker icon appears in the menu bar.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <p class="install-reason">Removing this warning for every user would require notarization and a paid Apple Developer Program membership. The source is public if you prefer to build it yourself. <a href="https://github.com/EgemenBaki/SoundHop/blob/main/INSTALL.md" target="_blank" rel="noopener noreferrer">Full installation notes</a>.</p>
+    </section>
+
     <section class="closing" aria-labelledby="closing-title">
       <h2 id="closing-title">SoundHop for macOS.</h2>
       <p>Free and open source. Download the latest release for macOS&nbsp;14 and later.</p>
@@ -606,7 +750,7 @@
   <footer class="page">
     <p>© 2026 Egemen Baki · <a class="footer-link" href="https://github.com/EgemenBaki/SoundHop/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></p>
     <p>
-      <a class="footer-link" href="https://github.com/EgemenBaki/SoundHop/blob/main/INSTALL.md" target="_blank" rel="noopener noreferrer">Install notes</a>
+      <a class="footer-link" href="#install">Install steps</a>
       · <a class="footer-link" href="https://github.com/EgemenBaki/SoundHop" target="_blank" rel="noopener noreferrer">Source</a>
       · No cookies, no analytics.
     </p>
