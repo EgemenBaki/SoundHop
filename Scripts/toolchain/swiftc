@@ -11,6 +11,12 @@ TOOLCHAIN="${SOUNDHOP_SWIFT_TOOLCHAIN:-$USER_HOME/Library/Developer/Toolchains/s
 if [ ! -x "$TOOLCHAIN" ]; then
     TOOLCHAIN="$USER_HOME/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin/swiftc"
 fi
+# A swiftly toolchain may be absent on a fresh machine. Xcode's own compiler
+# always matches the SDK it ships, so prefer it over the Command Line Tools,
+# whose xcrun resolves to an older Swift.
+if [ ! -x "$TOOLCHAIN" ]; then
+    TOOLCHAIN="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+fi
 if [ ! -x "$TOOLCHAIN" ]; then
     TOOLCHAIN="$(/usr/bin/xcrun --find swiftc)"
 fi

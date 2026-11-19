@@ -34,9 +34,10 @@ Release instructions live in the SoundHop repository at
 
 ## Installation note
 
-The release is ad-hoc signed and not notarized by Apple. On first launch macOS
-may ask the user to approve it in **System Settings → Privacy & Security**. The
-page should not imply that the app is notarized or approved by Apple.
+The release is signed with a Developer ID certificate and notarized by Apple,
+so macOS opens it without a security warning. Describe it as “signed and
+notarized by Apple”, never as “approved by Apple” — notarization is a malware
+scan, not an App Store review.
 
 ## Performance
 

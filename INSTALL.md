@@ -18,52 +18,32 @@ https://github.com/EgemenBaki/SoundHop/releases/latest
 
 SoundHop has no Dock icon and no main window. It lives in the menu bar.
 
-## First launch: macOS may block the app
+## First launch
 
-The current release is **ad-hoc signed but not notarized by Apple**. macOS
-Gatekeeper may show a dialog saying:
+SoundHop is signed with a Developer ID certificate and notarized by Apple.
+macOS verifies the download and opens the app normally: there is no Gatekeeper
+warning and no approval step. Just open it from Applications and click the
+speaker icon in the menu bar.
 
-> “SoundHop” Not Opened — Apple could not verify “SoundHop” is free of malware.
+If macOS ever refuses to open your copy, it is old or has been modified. Delete
+it and download the latest release again instead of overriding the warning.
 
-**This is expected. The app is not damaged.**
+## Verify the download
 
-1. Click **Done**. Do **not** click “Move to Trash.”
-2. Open **System Settings → Privacy & Security**.
-3. Scroll down to the **Security** section.
-4. Find the message about **SoundHop** and click **Open Anyway**.
-5. Confirm with Touch ID or your password, then click **Open**.
-6. Open SoundHop again from Applications.
-
-This only needs to be done once. After approval, SoundHop opens normally.
-
-Do not disable Gatekeeper globally.
-
-### Terminal alternative
-
-If you are comfortable with Terminal, you can remove the quarantine flag from
-this one app:
+If you want to check the build before trusting it, run:
 
 ```sh
-xattr -dr com.apple.quarantine /Applications/SoundHop.app
-open /Applications/SoundHop.app
+spctl --assess --type open --context context:primary-signature -v SoundHop.dmg
+codesign --verify --strict -v /Applications/SoundHop.app
 ```
 
-This does not change any global security setting.
+`spctl` should report `accepted`, and `codesign` should finish without errors.
 
-### Why can't the app ask for permission itself?
-
-macOS blocks the app **before any of its code runs**, so it cannot show its own
-“please allow me” prompt. There is no public API for an app or installer to
-request Gatekeeper approval. The approval must come from macOS and the user.
-
-The only way to make the app open without this warning for every user is to
-notarize it with Apple. That requires a paid Apple Developer Program membership
-and a Developer ID certificate. This open-source build intentionally avoids
-that cost, so the first-launch approval is required.
 
 ## Build from source
 
-Requirements: macOS 14+, Xcode 26 or later, and the Swift 6.4.1 toolchain.
+Requirements: macOS 14+ and Xcode 26 or later. Xcode's bundled Swift toolchain
+is used when no swiftly toolchain is installed.
 
 ```sh
 git clone https://github.com/EgemenBaki/SoundHop.git

@@ -6,9 +6,12 @@ Use this before publishing a release.
 
 - [ ] Download `SoundHop.dmg` from the latest GitHub release.
 - [ ] Open the DMG and drag SoundHop to Applications.
-- [ ] First launch on a quarantined download shows the expected macOS security
-      message.
-- [ ] System Settings → Privacy & Security → Open Anyway launches the app.
+- [ ] `spctl --assess --type open --context context:primary-signature -v SoundHop.dmg`
+      reports `accepted`.
+- [ ] `xcrun stapler validate SoundHop.dmg` succeeds.
+- [ ] `codesign -dv --verbose=2 /Applications/SoundHop.app` shows a Developer ID
+      authority and a team identifier.
+- [ ] First launch on a quarantined download opens without a security warning.
 - [ ] No Dock icon appears.
 - [ ] The speaker icon appears in the menu bar.
 - [ ] The Bluetooth permission prompt appears the first time paired devices are
@@ -43,6 +46,6 @@ Use this before publishing a release.
 
 - [ ] No network traffic.
 - [ ] No analytics or accounts.
-- [ ] App launches from a quarantined DMG after Open Anyway.
+- [ ] App launches from a quarantined DMG without any approval step.
 - [ ] `dist/SoundHop.dmg` is universal (`arm64` and `x86_64`).
 - [ ] SHA-256 file is attached to the release.

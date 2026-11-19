@@ -19,20 +19,17 @@ SoundHop requires **macOS 14 or later**.
 2. Drag **SoundHop** into Applications.
 3. Open SoundHop from Applications.
 
-The current release is **ad-hoc signed but not notarized** by Apple. On first
-launch, macOS may say that it cannot verify SoundHop. This is expected:
+The release is **signed with a Developer ID certificate and notarized by
+Apple**, so macOS opens it without a security warning.
 
-1. Click **Done** — not “Move to Trash.”
-2. Open **System Settings → Privacy & Security**.
-3. Find the message about SoundHop under **Security** and click **Open Anyway**.
-4. Confirm, then open SoundHop from Applications.
+You can confirm that yourself before installing:
 
-This is a one-time approval. The app cannot ask for it itself because macOS
-blocks the app before its code runs. Removing the warning for all users would
-require notarization and a paid Apple Developer Program membership.
+```sh
+spctl --assess --type open --context context:primary-signature -v SoundHop.dmg
+codesign --verify --strict -v /Applications/SoundHop.app
+```
 
-See [INSTALL.md](INSTALL.md) for details, the Terminal alternative and build
-instructions.
+See [INSTALL.md](INSTALL.md) for details and build instructions.
 
 ## Features
 
@@ -52,8 +49,7 @@ instructions.
 Requirements:
 
 - macOS 14 or later
-- Xcode 26 or later
-- Swift 6.4.1 toolchain (swiftly or the swift.org installer)
+- Xcode 26 or later, with a Swift 6.4 toolchain (Xcode 27's bundled one works)
 
 ```sh
 Scripts/build.sh
@@ -65,7 +61,8 @@ Or open `SoundHop.xcodeproj` in Xcode and press Run.
 The project uses `~/Library/Developer/Toolchains/swift-6.4.1-RELEASE.xctoolchain`
 through `Scripts/toolchain/swiftc` when it is available. The wrapper supplies
 the environment Xcode 26.0 needs when resolving Swift package manifests with a
-custom toolchain, and falls back to Xcode's default toolchain otherwise.
+custom toolchain. When no swiftly toolchain is installed it uses Xcode's own
+compiler, which matches the SDK, rather than the Command Line Tools'.
 
 ## Release
 
@@ -73,8 +70,9 @@ custom toolchain, and falls back to Xcode's default toolchain otherwise.
 Scripts/package-release.sh
 ```
 
-This builds a universal (`arm64` + `x86_64`) Release app, creates
-`dist/SoundHop.dmg`, and writes a SHA-256 file. See [RELEASING.md](RELEASING.md).
+This builds a universal (`arm64` + `x86_64`) Release app, signs and notarizes
+it with a Developer ID certificate, creates `dist/SoundHop.dmg`, signs and
+notarizes that too, and writes a SHA-256 file. See [RELEASING.md](RELEASING.md).
 
 The website download button points to:
 
