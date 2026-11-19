@@ -17,10 +17,13 @@
 		A10000000000000000000028 /* DeviceShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001B /* DeviceShortcuts.swift */; };
 		A10000000000000000000029 /* AudioDeviceMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001C /* AudioDeviceMonitor.swift */; };
 		A1000000000000000000002A /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001D /* Preferences.swift */; };
+		A1000000000000000000002B /* BluetoothAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001E /* BluetoothAddress.swift */; };
+		A1000000000000000000002C /* BluetoothDeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001F /* BluetoothDeviceService.swift */; };
 		A20000000000000000000003 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = A20000000000000000000002 /* KeyboardShortcuts */; };
 		A30000000000000000000020 /* DeviceLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000000000000000000011 /* DeviceLibraryTests.swift */; };
 		A30000000000000000000021 /* DeviceShortcutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000000000000000000012 /* DeviceShortcutTests.swift */; };
 		A30000000000000000000022 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = A20000000000000000000005 /* KeyboardShortcuts */; };
+		A30000000000000000000023 /* BluetoothAddressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000000000000000000013 /* BluetoothAddressTests.swift */; };
 		A40000000000000000000020 /* DevicePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000011 /* DevicePresentation.swift */; };
 		A40000000000000000000021 /* HUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000012 /* HUDController.swift */; };
 		A40000000000000000000022 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000013 /* SettingsView.swift */; };
@@ -44,9 +47,12 @@
 		A1000000000000000000001B /* DeviceShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShortcuts.swift; sourceTree = "<group>"; };
 		A1000000000000000000001C /* AudioDeviceMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDeviceMonitor.swift; sourceTree = "<group>"; };
 		A1000000000000000000001D /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		A1000000000000000000001E /* BluetoothAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothAddress.swift; sourceTree = "<group>"; };
+		A1000000000000000000001F /* BluetoothDeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDeviceService.swift; sourceTree = "<group>"; };
 		A30000000000000000000010 /* SoundHopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundHopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30000000000000000000011 /* DeviceLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLibraryTests.swift; sourceTree = "<group>"; };
 		A30000000000000000000012 /* DeviceShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceShortcutTests.swift; sourceTree = "<group>"; };
+		A30000000000000000000013 /* BluetoothAddressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothAddressTests.swift; sourceTree = "<group>"; };
 		A40000000000000000000011 /* DevicePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePresentation.swift; sourceTree = "<group>"; };
 		A40000000000000000000012 /* HUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDController.swift; sourceTree = "<group>"; };
 		A40000000000000000000013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -131,6 +137,8 @@
 				A1000000000000000000001B /* DeviceShortcuts.swift */,
 				A1000000000000000000001C /* AudioDeviceMonitor.swift */,
 				A1000000000000000000001D /* Preferences.swift */,
+				A1000000000000000000001E /* BluetoothAddress.swift */,
+				A1000000000000000000001F /* BluetoothDeviceService.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -157,6 +165,7 @@
 			children = (
 				A30000000000000000000011 /* DeviceLibraryTests.swift */,
 				A30000000000000000000012 /* DeviceShortcutTests.swift */,
+				A30000000000000000000013 /* BluetoothAddressTests.swift */,
 			);
 			path = SoundHopTests;
 			sourceTree = "<group>";
@@ -278,6 +287,8 @@
 				A10000000000000000000028 /* DeviceShortcuts.swift in Sources */,
 				A10000000000000000000029 /* AudioDeviceMonitor.swift in Sources */,
 				A1000000000000000000002A /* Preferences.swift in Sources */,
+				A1000000000000000000002B /* BluetoothAddress.swift in Sources */,
+				A1000000000000000000002C /* BluetoothDeviceService.swift in Sources */,
 				A40000000000000000000020 /* DevicePresentation.swift in Sources */,
 				A40000000000000000000021 /* HUDController.swift in Sources */,
 				A40000000000000000000022 /* SettingsView.swift in Sources */,
@@ -294,6 +305,7 @@
 			files = (
 				A30000000000000000000020 /* DeviceLibraryTests.swift in Sources */,
 				A30000000000000000000021 /* DeviceShortcutTests.swift in Sources */,
+				A30000000000000000000023 /* BluetoothAddressTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,7 +369,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -367,7 +379,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.egemenbaki.soundhop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -385,7 +397,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -395,7 +407,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.egemenbaki.soundhop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -58,6 +58,23 @@ private struct MenuBarContent: View {
             }
         }
 
+        if !store.pairedBluetoothDevices.isEmpty {
+            Divider()
+
+            ForEach(store.pairedBluetoothDevices) { device in
+                Button(bluetoothActionTitle(for: device)) {
+                    if device.isConnected {
+                        store.disconnect(device.address, name: device.name)
+                    } else {
+                        store.connect(device)
+                    }
+                }
+                .disabled(
+                    store.isConnecting(device.address) || store.isDisconnecting(device.address)
+                )
+            }
+        }
+
         Divider()
 
         Button("Settings…") {
@@ -87,5 +104,16 @@ private struct MenuBarContent: View {
             return name
         }
         return "\(name) — \(shortcut.description)"
+    }
+
+    private func bluetoothActionTitle(for device: PairedBluetoothDevice) -> String {
+        if device.isConnected {
+            return store.isDisconnecting(device.address)
+                ? "Disconnecting from \(device.name)…"
+                : "Disconnect \(device.name)"
+        }
+        return store.isConnecting(device.address)
+            ? "Connecting to \(device.name)…"
+            : "Connect \(device.name)"
     }
 }

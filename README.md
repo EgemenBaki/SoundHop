@@ -4,7 +4,7 @@ A tiny, open-source macOS menu bar app for switching your sound output device
 with a global keyboard shortcut.
 
 [Download the latest release](https://github.com/EgemenBaki/SoundHop/releases/latest) ·
-[Website](https://egemenbaki.com.tr/soundhop) ·
+[Website](https://soundhop.egemenbaki.com.tr/) ·
 [MIT licensed](LICENSE)
 
 SoundHop lives in the menu bar. Press a shortcut and your Mac hops to the right
@@ -40,6 +40,7 @@ instructions.
 - Defaults are Control-Command-1 through 9, and any shortcut can be changed or
   cleared
 - Live device add/remove and default-output updates
+- Connect or disconnect paired Bluetooth audio devices from the menu
 - Disconnected devices stay remembered with their shortcut
 - Optional compact HUD
 - Launch at login

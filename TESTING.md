@@ -11,6 +11,8 @@ Use this before publishing a release.
 - [ ] System Settings → Privacy & Security → Open Anyway launches the app.
 - [ ] No Dock icon appears.
 - [ ] The speaker icon appears in the menu bar.
+- [ ] The Bluetooth permission prompt appears the first time paired devices are
+      listed, and granting it lets them appear.
 
 ## Devices and shortcuts
 
@@ -24,6 +26,9 @@ Use this before publishing a release.
 - [ ] Pressing a disconnected device's shortcut shows “<name> isn't connected”
       in the HUD and changes nothing.
 - [ ] Reconnecting the device keeps its shortcut.
+- [ ] A paired but disconnected Bluetooth device appears in the menu.
+- [ ] Connect switches to the device once its audio output appears.
+- [ ] Disconnect removes the output and falls back to another device.
 - [ ] Forget removes a disconnected device.
 
 ## Settings and HUD

@@ -6,6 +6,10 @@ struct DeviceActionFeedback: Identifiable, Equatable, Sendable {
         case switched
         case notConnected
         case failed
+        case connectFailed
+        case disconnected
+        case disconnectFailed
+        case audioUnavailable
     }
 
     let id = UUID()
@@ -23,6 +27,14 @@ struct DeviceActionFeedback: Identifiable, Equatable, Sendable {
             return "\(deviceName) isn't connected"
         case .failed:
             return "Couldn't switch to \(deviceName)"
+        case .connectFailed:
+            return "Couldn't connect to \(deviceName)"
+        case .disconnected:
+            return "Disconnected from \(deviceName)"
+        case .disconnectFailed:
+            return "Couldn't disconnect \(deviceName)"
+        case .audioUnavailable:
+            return "\(deviceName) connected, but no audio output appeared"
         }
     }
 }
@@ -31,24 +43,31 @@ struct DeviceActionFeedback: Identifiable, Equatable, Sendable {
 final class DeviceStore: ObservableObject {
     @Published private(set) var connectedDevices: [AudioDevice] = []
     @Published private(set) var rememberedDevices: [RememberedDevice] = []
+    @Published private(set) var pairedBluetoothDevices: [PairedBluetoothDevice] = []
     @Published private(set) var defaultOutputUID: String?
     @Published private(set) var lastFeedback: DeviceActionFeedback?
     @Published private(set) var lastError: String?
+    @Published private(set) var connectingAddresses: Set<BluetoothAddress> = []
+    @Published private(set) var disconnectingAddresses: Set<BluetoothAddress> = []
 
     private var library: DeviceLibrary
     private let storage: DeviceLibraryStorage
     private let service: AudioDeviceService
+    private let bluetooth: BluetoothDeviceService
     private lazy var monitor = AudioDeviceMonitor { [weak self] in
         self?.refresh()
     }
     private var registeredHotkeyUIDs = Set<String>()
+    private var bluetoothRefreshTask: Task<Void, Never>?
 
     init(
         storage: DeviceLibraryStorage = DeviceLibraryStorage(),
-        service: AudioDeviceService = AudioDeviceService()
+        service: AudioDeviceService = AudioDeviceService(),
+        bluetooth: BluetoothDeviceService = BluetoothDeviceService()
     ) {
         self.storage = storage
         self.service = service
+        self.bluetooth = bluetooth
         self.library = storage.load()
 
         refresh()
@@ -69,6 +88,8 @@ final class DeviceStore: ObservableObject {
     }
 
     func refresh() {
+        refreshBluetoothDevices()
+
         do {
             lastError = nil
             let devices = try service.outputDevices()
@@ -86,6 +107,83 @@ final class DeviceStore: ObservableObject {
             }
         } catch {
             lastError = error.localizedDescription
+        }
+    }
+
+    func isConnecting(_ address: BluetoothAddress) -> Bool {
+        connectingAddresses.contains(address)
+    }
+
+    func isDisconnecting(_ address: BluetoothAddress) -> Bool {
+        disconnectingAddresses.contains(address)
+    }
+
+    func pairedBluetoothDevice(for address: BluetoothAddress) -> PairedBluetoothDevice? {
+        pairedBluetoothDevices.first { $0.address == address }
+    }
+
+    /// Connects a paired device and switches to its audio output once Core
+    /// Audio publishes it. Opening the connection alone often leaves the Mac
+    /// on its previous output.
+    func connect(_ device: PairedBluetoothDevice) {
+        let address = device.address
+        guard !connectingAddresses.contains(address),
+              !disconnectingAddresses.contains(address)
+        else { return }
+
+        if let audioDevice = audioDevice(for: address) {
+            switchOutput(to: audioDevice)
+            return
+        }
+
+        connectingAddresses.insert(address)
+        let bluetoothService = bluetooth
+        Task {
+            let connected = await Task.detached(priority: .userInitiated) {
+                bluetoothService.connect(address)
+            }.value
+
+            guard connected else {
+                connectingAddresses.remove(address)
+                refreshBluetoothDevices()
+                present(feedback(.connectFailed, address: address, name: device.name))
+                return
+            }
+
+            guard let audioDevice = await waitForAudioDevice(address: address) else {
+                connectingAddresses.remove(address)
+                refresh()
+                present(feedback(.audioUnavailable, address: address, name: device.name))
+                return
+            }
+
+            connectingAddresses.remove(address)
+            refresh()
+            switchOutput(to: audioDevice)
+        }
+    }
+
+    func disconnect(_ address: BluetoothAddress, name: String) {
+        guard !connectingAddresses.contains(address),
+              !disconnectingAddresses.contains(address)
+        else { return }
+
+        disconnectingAddresses.insert(address)
+        let bluetoothService = bluetooth
+        Task {
+            let disconnected = await Task.detached(priority: .userInitiated) {
+                bluetoothService.disconnect(address)
+            }.value
+
+            disconnectingAddresses.remove(address)
+            refresh()
+            present(
+                feedback(
+                    disconnected ? .disconnected : .disconnectFailed,
+                    address: address,
+                    name: name
+                )
+            )
         }
     }
 
@@ -205,5 +303,50 @@ final class DeviceStore: ObservableObject {
     private func present(_ feedback: DeviceActionFeedback) {
         lastFeedback = feedback
         HUDController.shared.present(feedback)
+    }
+
+    private func refreshBluetoothDevices() {
+        bluetoothRefreshTask?.cancel()
+        bluetoothRefreshTask = Task { [bluetooth] in
+            let devices = await Task.detached(priority: .utility) {
+                bluetooth.pairedAudioDevices()
+            }.value
+            guard !Task.isCancelled else { return }
+            pairedBluetoothDevices = devices
+        }
+    }
+
+    private func audioDevice(for address: BluetoothAddress) -> AudioDevice? {
+        connectedDevices.first { $0.bluetoothAddress == address }
+    }
+
+    /// Connecting only makes the device reachable; the HAL endpoint appears a
+    /// moment later, and switching before then fails.
+    private func waitForAudioDevice(
+        address: BluetoothAddress,
+        timeout: Duration = .seconds(8)
+    ) async -> AudioDevice? {
+        let clock = ContinuousClock()
+        let deadline = clock.now.advanced(by: timeout)
+
+        while clock.now < deadline {
+            if let device = audioDevice(for: address) { return device }
+            try? await Task.sleep(for: .milliseconds(200))
+        }
+        return audioDevice(for: address)
+    }
+
+    private func feedback(
+        _ kind: DeviceActionFeedback.Kind,
+        address: BluetoothAddress,
+        name: String
+    ) -> DeviceActionFeedback {
+        DeviceActionFeedback(
+            kind: kind,
+            deviceUID: address.digits,
+            deviceName: name,
+            transport: .bluetooth,
+            isVirtual: false
+        )
     }
 }

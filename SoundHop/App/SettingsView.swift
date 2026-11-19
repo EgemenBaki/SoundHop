@@ -17,10 +17,28 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(store.rememberedDevices) { device in
+                        let isConnected = store.isConnected(device.uid)
+                        let address = device.bluetoothAddress
+
                         DeviceRow(
                             device: device,
-                            isConnected: store.isConnected(device.uid),
+                            isConnected: isConnected,
                             displayName: displayName(for: device),
+                            canConnect: !isConnected && pairedDevice(for: device) != nil,
+                            canDisconnect: isConnected && address != nil,
+                            isBluetoothBusy: address.map {
+                                store.isConnecting($0) || store.isDisconnecting($0)
+                            } ?? false,
+                            onConnect: {
+                                if let paired = pairedDevice(for: device) {
+                                    store.connect(paired)
+                                }
+                            },
+                            onDisconnect: {
+                                if let address {
+                                    store.disconnect(address, name: device.name)
+                                }
+                            },
                             onForget: {
                                 store.forgetDisconnectedDevice(uid: device.uid)
                             }
@@ -71,12 +89,22 @@ struct SettingsView: View {
             ? "\(device.name) (\(device.transport.displayName))"
             : device.name
     }
+
+    private func pairedDevice(for device: RememberedDevice) -> PairedBluetoothDevice? {
+        guard let address = device.bluetoothAddress else { return nil }
+        return store.pairedBluetoothDevice(for: address)
+    }
 }
 
 private struct DeviceRow: View {
     let device: RememberedDevice
     let isConnected: Bool
     let displayName: String
+    let canConnect: Bool
+    let canDisconnect: Bool
+    let isBluetoothBusy: Bool
+    let onConnect: () -> Void
+    let onDisconnect: () -> Void
     let onForget: () -> Void
 
     var body: some View {
@@ -110,6 +138,22 @@ private struct DeviceRow: View {
             Spacer(minLength: 16)
 
             KeyboardShortcuts.Recorder(for: DeviceShortcuts.name(forUID: device.uid))
+
+            if canDisconnect {
+                Button("Disconnect", action: onDisconnect)
+                    .buttonStyle(.borderless)
+                    .disabled(isBluetoothBusy)
+                    .help("Disconnect \(device.name)")
+                    .accessibilityLabel("Disconnect \(device.name)")
+            }
+
+            if canConnect {
+                Button("Connect", action: onConnect)
+                    .buttonStyle(.borderless)
+                    .disabled(isBluetoothBusy)
+                    .help("Connect \(device.name)")
+                    .accessibilityLabel("Connect \(device.name)")
+            }
 
             if !isConnected {
                 Button("Forget", role: .destructive, action: onForget)

@@ -28,12 +28,14 @@ extension DeviceActionFeedback {
     var hudSymbolName: String {
         switch kind {
         case .switched: transport.symbolName
+        case .disconnected: "bolt.slash"
         case .notConnected: "wifi.slash"
-        case .failed: "exclamationmark.triangle.fill"
+        case .failed, .connectFailed, .disconnectFailed, .audioUnavailable:
+            "exclamationmark.triangle.fill"
         }
     }
 
     var isError: Bool {
-        kind != .switched
+        kind != .switched && kind != .disconnected
     }
 }
